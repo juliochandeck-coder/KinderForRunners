@@ -1,0 +1,21 @@
+name: Publicar en Netlify
+on:
+  workflow_dispatch:
+    inputs:
+      proxy:
+        description: "Ruta de despliegue de Netlify (temporal)"
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Desplegar
+        env:
+          PROXY: ${{ inputs.proxy }}
+        run: |
+          echo "::add-mask::$PROXY"
+          npx -y @netlify/mcp@latest --site-id f570dea0-7a8d-48b3-af05-c7c904d326a6 --proxy-path "$PROXY"
