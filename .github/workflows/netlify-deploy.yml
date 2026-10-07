@@ -5,6 +5,9 @@ on:
       proxy:
         description: "Ruta de despliegue de Netlify (temporal)"
         required: true
+      fontskey:
+        description: "FONTS_KEY"
+        required: true
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,14 +16,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Desplegar
+      - name: Armar sitio estático
+        env:
+          FONTS_KEY: ${{ inputs.fontskey }}
+        run: |
+          echo "::add-mask::$FONTS_KEY"
+          node scripts/build-static.mjs
+      - name: Publicar
         env:
           PROXY: ${{ inputs.proxy }}
+        working-directory: dist
         run: |
           echo "::add-mask::$PROXY"
           set -o pipefail
-          npx -y @netlify/mcp@latest --site-id f570dea0-7a8d-48b3-af05-c7c904d326a6 --proxy-path "$PROXY" 2>&1 | tee out.txt || {
-            tail -n 25 out.txt | grep -v "^\s*$" | while IFS= read -r l; do echo "::error::$l"; done
+          npx -y @netlify/mcp@latest --site-id f570dea0-7a8d-48b3-af05-c7c904d326a6 --proxy-path "$PROXY" 2>&1 | tee ../out.txt || {
+            tail -n 25 ../out.txt | grep -v "^\s*$" | while IFS= read -r l; do echo "::error::$l"; done
             exit 1
           }
-          tail -n 8 out.txt | while IFS= read -r l; do echo "::notice::$l"; done
+          tail -n 8 ../out.txt | while IFS= read -r l; do echo "::notice::$l"; done

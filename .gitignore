@@ -5,3 +5,4 @@ node_modules
 lib/generator-html.ts
 next-env.d.ts
 generator/fonts/*.woff2
+dist
