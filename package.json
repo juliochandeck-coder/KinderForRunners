@@ -1,0 +1,24 @@
+{
+  "name": "k4r-rutinas",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "generator": "node scripts/build-generator.mjs",
+    "predev": "node scripts/build-generator.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/build-generator.mjs",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
