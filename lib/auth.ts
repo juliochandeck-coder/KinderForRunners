@@ -1,6 +1,6 @@
 // Sesión firmada con HMAC (Web Crypto, funciona en el proxy y en las rutas).
 export const COOKIE = "k4r_session";
-export const SESSION_DAYS = 90;
+export const SESSION_DAYS = 400; // máximo que permiten los navegadores; se renueva en cada visita
 
 const enc = new TextEncoder();
 
@@ -42,12 +42,26 @@ export async function verifyToken(token: string | undefined, secret: string | nu
   return safeEqual(sig, await sign(payload, secret)) ? decodeURIComponent(user) : null;
 }
 
-// APP_USERS="julio:clave,mandri:otra-clave"  (o APP_PASSWORD="clave" para un solo usuario)
-export function checkPassword(password: string): string | null {
+export const cookieOptions = {
+  httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: SESSION_DAYS * 86400,
+};
+
+// APP_USERS="julio:clave-o-token,mandri:otra"  (o APP_PASSWORD="clave" para un solo usuario).
+// Cada clave sirve también como enlace de acceso: /k/<clave>. La primera de cada persona es la de su enlace.
+function entries(): (readonly [string, string])[] {
   const users = (process.env.APP_USERS || "")
     .split(",").map((p) => p.trim()).filter(Boolean)
-    .map((p) => { const j = p.indexOf(":"); return [p.slice(0, j), p.slice(j + 1)] as const; });
-  if (process.env.APP_PASSWORD) users.push(["julio", process.env.APP_PASSWORD]);
-  for (const [user, pass] of users) if (pass && safeEqual(password, pass)) return user || "usuario";
+    .map((p) => { const j = p.indexOf(":"); return [p.slice(0, j) || "usuario", p.slice(j + 1)] as const; });
+  if (process.env.APP_PASSWORD) users.push(["julio", process.env.APP_PASSWORD] as const);
+  return users.filter(([, pass]) => pass.length > 0);
+}
+
+export function checkPassword(password: string): string | null {
+  for (const [user, pass] of entries()) if (safeEqual(password, pass)) return user;
   return null;
+}
+
+export function tokenForUser(user: string): string | null {
+  const hit = entries().find(([u]) => u === user);
+  return hit ? hit[1] : null;
 }

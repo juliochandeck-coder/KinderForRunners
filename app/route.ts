@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import generatorHtml from "@/lib/generator-html";
-import { COOKIE, getSecret, verifyToken } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { COOKIE, cookieOptions, createToken, getSecret, verifyToken } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,7 @@ const HEAD = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ef5026">
 <meta name="robots" content="noindex,nofollow">
-<link rel="manifest" href="/manifest.webmanifest">
+<link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
 <link rel="icon" href="/icons/icon-192.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,9 +19,12 @@ const HEAD = `<!doctype html><html lang="es"><head><meta charset="utf-8">
 
 // El generador (con las tipografías incrustadas) solo se entrega a usuarios con sesión.
 export async function GET(req: Request) {
-  const user = await verifyToken((await cookies()).get(COOKIE)?.value, getSecret());
-  if (!user) return Response.redirect(new URL("/login", req.url), 307);
-  return new Response(HEAD + generatorHtml + "</body></html>", {
+  const secret = getSecret();
+  const user = await verifyToken((await cookies()).get(COOKIE)?.value, secret);
+  if (!user || !secret) return Response.redirect(new URL("/login", req.url), 307);
+  const res = new NextResponse(HEAD + generatorHtml + "</body></html>", {
     headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-cache" },
   });
+  res.cookies.set(COOKIE, await createToken(user, secret), cookieOptions); // la sesión se renueva en cada uso
+  return res;
 }

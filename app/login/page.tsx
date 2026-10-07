@@ -17,7 +17,7 @@ const styles = `
 
 export default async function Login({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
   const { e } = await searchParams;
-  const msg = e === "1" ? "Contraseña incorrecta. Intenta de nuevo." : e === "config" ? "Falta configurar AUTH_SECRET y APP_USERS en Netlify." : null;
+  const msg = e === "1" ? "Clave incorrecta. Intenta de nuevo." : e === "link" ? "Ese enlace de acceso no es válido. Pídele uno nuevo a Julio." : e === "config" ? "Falta configurar AUTH_SECRET y APP_USERS en Netlify." : null;
   return (
     <main className="k-wrap">
       <style>{styles}</style>
@@ -25,9 +25,9 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
       <form className="k-card" method="post" action="/api/login">
         <svg className="k-logo" viewBox="0 32 1078 1014" role="img" aria-label="Kinder for Runners">{(logo as string[]).map((d, i) => <path key={i} fill="#ef5026" d={d} />)}</svg>
         <h1>WORKOUTS</h1>
-        <p>Generador privado de Kinder for Runners.</p>
+        <p>Generador privado de Kinder for Runners. Abre tu enlace de acceso personal y no tendrás que escribir nada; si no lo tienes a mano, usa tu clave.</p>
         {msg && <div className="k-err" role="alert">{msg}</div>}
-        <label htmlFor="password">Contraseña</label>
+        <label htmlFor="password">Clave</label>
         <input id="password" name="password" type="password" autoComplete="current-password" required autoFocus />
         <button type="submit">Entrar</button>
       </form>
