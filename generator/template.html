@@ -1,8 +1,8 @@
-<title>Workouts Kinder for Runners</title>
+<title>K4R Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
 <style>
-@font-face{font-family:"K Bebas";src:url(data:font/woff2;base64,__Bebas__) format("woff2")}
+@font-face{font-family:"K Bebas";src:url(data:font/woff2;base64,__BebasKai__) format("woff2")}
 /* Layout: sticky control column (collapsible sections) on the left, three 4:5 posts on the right; stacks on phones. */
 :root{
   --bg:#f2f1ef; --surface:#ffffff; --fg:#1c1917; --muted:#6d6560; --line:#e0dbd7;
@@ -89,7 +89,29 @@ figcaption b{font-family:var(--display);font-weight:400;font-size:22px;letter-sp
 @media (max-width:1020px){.wrap{grid-template-columns:minmax(0,1fr)}aside{position:static;max-height:none;overflow:visible;padding-right:0}}
 @media (max-width:640px){.posts{grid-template-columns:minmax(0,1fr)}header.top h1{font-size:40px;gap:12px}header.top h1 svg{height:50px}.tpls{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
+<style>
+/* App tabs: one strip above both tools; only the active tool is shown */
+.apptabs{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.apptabs-in{max-width:1560px;margin:0 auto;padding-inline:20px;padding-block:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.apptabs-brand{font-family:var(--display);font-size:20px;letter-spacing:.06em;color:var(--muted)}
+.apptabs-seg{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
+.apptabs-seg button{font-family:var(--display);font-size:20px;letter-spacing:.06em;line-height:1;border:0;background:none;color:var(--fg);padding:8px 18px 6px;border-radius:999px;cursor:pointer}
+.apptabs-seg button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.apptabs-seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.view aside{top:calc(env(safe-area-inset-top,0px) + 70px);max-height:calc(100vh - 84px)}
+@media (max-width:1020px){.view aside{max-height:none}}
+</style>
 
+<nav class="apptabs" aria-label="Herramientas">
+  <div class="apptabs-in">
+    <span class="apptabs-brand">K4R Studio</span>
+    <div class="apptabs-seg" role="tablist">
+      <button type="button" role="tab" data-view="workouts" aria-selected="true">Workouts</button>
+      <button type="button" role="tab" data-view="tiempos" aria-selected="false">Tiempos</button>
+    </div>
+  </div>
+</nav>
+<section class="view" id="view-workouts">
 <div class="wrap">
   <header class="top">
     <h1><svg id="hdrLogo" viewBox="0 32 1078 1014" role="img" aria-label="Kinder for Runners"></svg><span>WORKOUTS</span></h1>
@@ -325,20 +347,21 @@ figcaption b{font-family:var(--display);font-weight:400;font-size:22px;letter-sp
     </div>
   </main>
 </div>
+</section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 const LOGO = __LOGO__;
 const FONTFILES = {
   "K AncHeavy":"__ANC-HeavyItalic__", "K AncDemi":"__ANC-DemiItalic__", "K AncMed":"__ANC-MediumItalic__",
-  "K BebasC":"__Bebas__", "K GBlack":"__GothamBlack__", "K GBold":"__GothamBold__", "K Poppins":"__PoppinsBold__"
+  "K BebasC":"__BebasKai__", "K GBlack":"__GothamBlack__", "K GBold":"__GothamBold__", "K Poppins":"__PoppinsBold__"
 };
 const FO = {
   ancHeavy:{fam:"K AncHeavy",sk:0,label:"Avenir Cond. Heavy itálica"},
   ancDemi:{fam:"K AncDemi",sk:0,label:"Avenir Cond. Demi itálica"},
   ancMed:{fam:"K AncMed",sk:0,label:"Avenir Cond. Medium itálica"},
-  bebas:{fam:"K BebasC",sk:0,label:"Bebas Neue"},
-  bebasI:{fam:"K BebasC",sk:.16,label:"Bebas Neue itálica"},
+  bebas:{fam:"K BebasC",sk:0,label:"Bebas Kai"},
+  bebasI:{fam:"K BebasC",sk:.16,label:"Bebas Kai itálica"},
   gBlack:{fam:"K GBlack",sk:0,label:"Gotham Black"},
   gBlackI:{fam:"K GBlack",sk:.14,label:"Gotham Black itálica"},
   gBold:{fam:"K GBold",sk:0,label:"Gotham Bold"},
@@ -1762,4 +1785,26 @@ boot();
 (function(){ try { const probe = new File([new Blob(["x"],{type:"image/png"})],"a.png",{type:"image/png"});
   if (navigator.canShare && navigator.canShare({files:[probe]})){ const b = document.getElementById("shareAll"); b.hidden = false; b.onclick = shareAll; } } catch(e){} })();
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("/sw.js").catch(()=>{});
+</script>
+
+__TIEMPOS__
+<script>
+/* switch between Workouts and Tiempos; remembers the last tab and answers to #workouts / #tiempos */
+(() => {
+  const views = {workouts: document.getElementById("view-workouts"), tiempos: document.getElementById("view-tiempos")};
+  const btns = document.querySelectorAll(".apptabs-seg button");
+  function show(v, push){
+    if (!views[v]) v = "workouts";
+    Object.entries(views).forEach(([k, el]) => el.hidden = k !== v);
+    btns.forEach(b => b.setAttribute("aria-selected", b.dataset.view === v));
+    try { localStorage.setItem("k4r-tab", v); } catch(e){}
+    if (push) { try { history.replaceState(null, "", "#" + v); } catch(e){} }
+    window.scrollTo(0, 0);
+  }
+  btns.forEach(b => b.onclick = () => show(b.dataset.view, true));
+  let start = (location.hash || "").slice(1);
+  if (!views[start]) { try { start = localStorage.getItem("k4r-tab") || "workouts"; } catch(e){ start = "workouts"; } }
+  show(start, false);
+  window.addEventListener("hashchange", () => show(location.hash.slice(1), false));
+})();
 </script>

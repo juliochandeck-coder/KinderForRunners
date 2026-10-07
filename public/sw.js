@@ -1,5 +1,5 @@
-// Copia offline del generador (solo después de entrar con contraseña).
-const CACHE = "k4r-v1";
+// Copia offline de la app (Workouts + Tiempos) y de sus librerías externas.
+const CACHE = "k4r-v2";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", (e) => {
@@ -15,7 +15,7 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
-  if (/cdnjs\.cloudflare\.com|fonts\.(googleapis|gstatic)\.com/.test(url.host)) {
+  if (/cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.(googleapis|gstatic)\.com/.test(url.host)) {
     e.respondWith(caches.match(req).then((hit) => hit || fetch(req).then((res) => {
       const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); return res;
     })));

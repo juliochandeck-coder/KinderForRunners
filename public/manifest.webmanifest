@@ -1,7 +1,7 @@
 {
-  "name": "Workouts K4R",
-  "short_name": "Workouts K4R",
-  "description": "Generador de artes de rutinas de Kinder for Runners",
+  "name": "K4R Studio",
+  "short_name": "K4R Studio",
+  "description": "Artes de rutinas y videos de tiempos de Kinder for Runners",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
