@@ -1,0 +1,671 @@
+<style>
+/* ---------- Tiempos (videos de resultados K4R × High School) ---------- */
+:root{--stage:#0b0908}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--stage:#000}}
+:root[data-theme="dark"]{--stage:#000}
+#view-tiempos{--display:"K Bebas",Impact,"Arial Narrow",sans-serif}
+#view-tiempos header.top h1 span{padding-top:0}
+#view-tiempos .wrap{max-width:1560px;margin:0 auto;padding-inline:20px;padding-block:20px 48px;display:grid;grid-template-columns:380px minmax(0,1fr);gap:28px;align-items:start}
+#view-tiempos header.top{grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--fg);padding-bottom:10px}
+#view-tiempos header.top h1{font-family:var(--display);font-weight:400;font-size:52px;line-height:.9;margin:0;letter-spacing:.02em;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+#view-tiempos header.top .logos{display:flex;align-items:center;gap:14px;flex:none}
+#view-tiempos header.top .logos svg{height:64px;width:auto;display:block}
+#view-tiempos header.top .logos .sep{width:1px;align-self:stretch;margin-block:6px;background:var(--line)}
+#view-tiempos header.top .logos .hs{display:block;position:relative;height:56px;aspect-ratio:300/206}
+#view-tiempos header.top .logos .hs i{position:absolute;inset:0;background:var(--fg);-webkit-mask:url(__T-HSINK__) center/contain no-repeat;mask:url(__T-HSINK__) center/contain no-repeat}
+#view-tiempos header.top .logos .hs img{position:absolute;inset:0;width:100%;height:100%;max-width:none}
+#view-tiempos header.top h1 span.t{padding-top:6px}
+#view-tiempos header.top h1 span.t b{font-weight:400;color:var(--accent)}
+#view-tiempos header.top p{margin:0;color:var(--muted);font-size:14px}
+#view-tiempos aside{display:flex;flex-direction:column;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);max-height:calc(100vh - 24px);overflow-y:auto;padding-right:6px}
+#view-tiempos details.sec{border-bottom:1px solid var(--line);padding-block:12px}
+#view-tiempos details.sec>summary{cursor:pointer;list-style:none;font-family:var(--display);font-size:22px;letter-spacing:.04em;line-height:1;display:flex;justify-content:space-between;align-items:center}
+#view-tiempos details.sec>summary::-webkit-details-marker{display:none}
+#view-tiempos details.sec>summary::after{content:"+";font-family:var(--body);font-size:18px;color:var(--muted)}
+#view-tiempos details.sec[open]>summary::after{content:"–"}
+#view-tiempos details.sec>summary small{font-family:var(--body);font-size:12px;color:var(--muted);letter-spacing:0;margin-left:8px;margin-right:auto}
+#view-tiempos .body{display:flex;flex-direction:column;gap:10px;padding-top:12px}
+#view-tiempos textarea,#view-tiempos input[type=text],#view-tiempos select{width:100%;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 11px}
+#view-tiempos textarea{min-height:330px;resize:vertical;font-size:14px;line-height:1.4;font-variant-numeric:tabular-nums}
+#view-tiempos textarea:focus,#view-tiempos input:focus,#view-tiempos button:focus-visible,#view-tiempos select:focus{outline:2px solid var(--accent);outline-offset:1px}
+#view-tiempos .hint{font-size:12.5px;color:var(--muted);margin:0}
+#view-tiempos .note{font-size:13px;margin:0;padding:8px 10px;border-radius:6px;background:var(--soft)}
+#view-tiempos .fmt{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:6px;padding:8px 10px;margin:0;white-space:pre;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.5}
+#view-tiempos .grid2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px 12px;align-items:center;font-size:13.5px}
+#view-tiempos .grid2>label{color:var(--muted)}
+#view-tiempos .check{display:flex;gap:8px;align-items:center;font-size:13.5px}
+#view-tiempos .check input{accent-color:var(--accent);width:16px;height:16px;flex:none}
+#view-tiempos input[type=range]{width:100%;accent-color:var(--accent)}
+#view-tiempos .rowv{display:flex;gap:10px;align-items:center}
+#view-tiempos .rowv output{font-variant-numeric:tabular-nums;font-size:13px;min-width:3.4em;text-align:right;color:var(--fg)}
+#view-tiempos .btn{font:inherit;font-weight:700;border:0;border-radius:6px;padding:10px 14px;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+#view-tiempos .btn:disabled{opacity:.5;cursor:default}
+#view-tiempos .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+#view-tiempos .btn.sm{padding:6px 10px;font-size:13px}
+#view-tiempos main{display:flex;flex-direction:column;gap:14px;min-width:0}
+#view-tiempos .tbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#view-tiempos .tbar .info{font-size:13px;color:var(--muted)}
+#view-tiempos .result{display:flex;flex-direction:column;align-items:center;gap:14px}
+#view-tiempos .stage{background:var(--stage);border-radius:14px;padding:10px;box-shadow:0 1px 0 var(--line),0 18px 40px -24px rgba(0,0,0,.6);max-width:100%}
+#view-tiempos .stage canvas{display:block;height:min(68vh,720px);aspect-ratio:9/16;max-width:100%;width:auto;border-radius:6px;background:#000}
+#view-tiempos .transport{display:flex;align-items:center;gap:10px;width:min(100%,420px)}
+#view-tiempos .transport button{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;display:grid;place-items:center}
+#view-tiempos .transport button svg{width:16px;height:16px;fill:currentColor}
+#view-tiempos .transport output{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);min-width:7.2em;text-align:right}
+#view-tiempos .phases{display:flex;width:min(100%,420px);font-size:11.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+#view-tiempos .phases span{border-top:3px solid var(--line);padding-top:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#view-tiempos .phases span.mid{border-color:var(--accent);color:var(--fg)}
+#view-tiempos .export{display:flex;flex-direction:column;gap:8px}
+#view-tiempos .export .row{display:flex;gap:8px;flex-wrap:wrap}
+#view-tiempos .prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+#view-tiempos .prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}
+#view-tiempos .status{font-size:13px;color:var(--muted);margin:0;min-height:1.4em}
+#view-tiempos .status.err{color:var(--accent)}
+#view-tiempos video.out{height:min(50vh,480px);max-width:100%;aspect-ratio:9/16;border-radius:6px;background:#000}
+#view-tiempos .outwrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+#view-tiempos .outwrap b{font-family:var(--display);font-weight:400;font-size:22px;letter-spacing:.05em}
+@media (max-width:1020px){#view-tiempos .wrap{grid-template-columns:minmax(0,1fr)}
+#view-tiempos aside{position:static;max-height:none;overflow:visible;padding-right:0}
+#view-tiempos .stage canvas{height:min(62vh,600px)}}
+@media (max-width:640px){#view-tiempos header.top h1{font-size:40px;gap:12px}
+#view-tiempos header.top .logos svg{height:48px}
+#view-tiempos header.top .logos .hs{height:42px}}
+@media (prefers-reduced-motion:reduce){#view-tiempos .prog i{transition:none}}
+</style>
+<section class="view" id="view-tiempos" hidden>
+<div class="wrap">
+  <header class="top">
+    <h1><span class="logos"><svg id="tm-hdrLogo" viewBox="0 32 1078 1014" role="img" aria-label="Kinder for Runners"></svg><i class="sep"></i><span class="hs" role="img" aria-label="High School · Uphill × Kinder for Runners"><i></i><img src="__T-HSOR__" alt=""></span></span><span class="t">TIEMPOS K4R <b>+</b> HS</span></h1>
+    <p>Pega los resultados, ajusta la animación y descarga el MP4 vertical.</p>
+  </header>
+
+  <aside>
+    <details class="sec" open>
+      <summary>Resultados <small>una carrera debajo de otra</small></summary>
+      <div class="body">
+        <textarea id="tm-raw" spellcheck="false" aria-label="Resultados"></textarea>
+        <p class="note" id="tm-parseNote"></p>
+        <p class="hint">Formato: nombre de la carrera, fecha, distancia y debajo cada corredor con su tiempo. Una carrera puede tener varias distancias.</p>
+        <pre class="fmt">PANAMA CITY MARATHON
+20/09/2026
+21K
+Christian Zuppicchini 1:37
+Mandri Pinzón 1:53
+10K
+Aldo López 0:46</pre>
+      </div>
+    </details>
+
+    <details class="sec" open>
+      <summary>Animación</summary>
+      <div class="body">
+        <label class="check"><input type="checkbox" id="tm-sortTimes" checked> Ordenar corredores del más rápido al más lento</label>
+        <label class="check"><input type="checkbox" id="tm-showHS" checked> Incluir el logo High School junto al de K4R</label>
+        <div class="grid2">
+          <label for="tm-endText">Texto final</label><input type="text" id="tm-endText" value="¡FELICIDADES!">
+          <label for="tm-durAuto">Tiempos en pantalla</label>
+          <div class="rowv">
+            <label class="check" style="flex:none"><input type="checkbox" id="tm-durAuto" checked> Auto</label>
+            <input type="range" id="tm-dur" min="4" max="25" step="0.5" value="14" aria-label="Segundos en pantalla">
+            <output id="tm-durOut">14 s</output>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="sec" open>
+      <summary>Tamaño y espacios <small id="tm-fitName">automático</small></summary>
+      <div class="body">
+        <label class="check"><input type="checkbox" id="tm-fitAuto" checked> Automático según cuántas líneas haya</label>
+        <div class="grid2">
+          <label for="tm-tSize">Tamaño de letra</label>
+          <div class="rowv"><input type="range" id="tm-tSize" min="55" max="140" step="1" value="100"><output id="tm-tSizeOut">100%</output></div>
+          <label for="tm-tGap">Espacio entre líneas</label>
+          <div class="rowv"><input type="range" id="tm-tGap" min="40" max="200" step="1" value="100"><output id="tm-tGapOut">100%</output></div>
+          <label for="tm-yOff">Posición vertical</label>
+          <div class="rowv"><input type="range" id="tm-yOff" min="-260" max="260" step="5" value="0"><output id="tm-yOut">0</output></div>
+        </div>
+        <p class="hint">Con pocas líneas el texto crece y gana aire; con muchas se juntan los espacios y luego se reduce la letra para que todo quepa.</p>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Exportar</summary>
+      <div class="body">
+        <div class="grid2">
+          <label for="tm-res">Resolución</label>
+          <select id="tm-res"><option value="1080">1080 × 1920 · Instagram</option><option value="2160">2160 × 3840 · 4K como los originales</option></select>
+          <label for="tm-fname">Archivo</label><input type="text" id="tm-fname" spellcheck="false">
+        </div>
+        <label class="check"><input type="checkbox" id="tm-blur" checked> Desenfoque de movimiento</label>
+        <p class="hint">Tipografía del video: Bebas Kai, dibujada desde el archivo que enviaste, así que no depende de las fuentes instaladas.</p>
+      </div>
+    </details>
+  </aside>
+
+  <main>
+    <div class="tbar">
+      <span class="info" id="tm-info">1080 × 1920 px · vertical 9:16</span>
+      <button type="button" class="btn" id="tm-exportBtn">Exportar MP4</button>
+    </div>
+    <div class="export">
+      <div class="prog" id="tm-bar" hidden><i></i></div>
+      <p class="status" id="tm-status"></p>
+      <div class="row">
+        <button type="button" class="btn ghost sm" id="tm-cancelBtn" hidden>Cancelar</button>
+        <button type="button" class="btn ghost sm" id="tm-againBtn" hidden>Descargar de nuevo</button>
+        <button type="button" class="btn ghost sm" id="tm-shareBtn" hidden>Compartir</button>
+      </div>
+    </div>
+    <div class="result">
+      <div class="stage"><canvas id="tm-cv" width="540" height="960" aria-label="Vista previa de la animación"></canvas></div>
+      <div class="transport">
+        <button type="button" id="tm-play" aria-label="Pausar"><svg viewBox="0 0 16 16" id="tm-playIcon"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg></button>
+        <input type="range" id="tm-scrub" min="0" max="1000" value="0" aria-label="Posición en la animación">
+        <output id="tm-clock">0.0 / 20.0 s</output>
+      </div>
+      <div class="phases" id="tm-phases" aria-hidden="true"><span>Intro</span><span class="mid">Tiempos</span><span>Cierre</span></div>
+      <div class="outwrap" id="tm-outWrap" hidden><b>Video exportado</b><video class="out" id="tm-outVideo" controls playsinline muted></video></div>
+    </div>
+  </main>
+</div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/mp4-muxer@5.2.2/build/mp4-muxer.js"></script>
+<script>
+(() => {
+"use strict";
+
+const HDR_LOGO = ["M510.71,32.55h1.78l-.59,2.37-5.92,5.92-6.51,8.28-7.69,10.65-5.92,8.88-7.1,12.43-8.88,17.16-5.33,11.24-6.51,15.98-7.69,21.9-7.1,24.85-5.33,23.08-2.96,15.98-2.96,21.9-1.78,21.3v31.96l1.78,21.3,2.37,15.39,3.55,15.39,4.14,12.43,6.51,14.2,6.51,10.06,5.33,6.51,7.69,7.1,5.92,4.14,8.28,4.14,11.84,3.55,2.96.59h17.16l13.02-1.78,13.61-3.55,5.92-2.96,5.33-6.51,4.73-8.28,3.55-8.28,2.37-9.47.59-4.14v-10.06l-1.78-11.84-3.55-12.43-4.73-10.65-5.92-10.65-5.92-8.28-4.73-5.92-6.51-7.1-5.92-5.92-8.28-6.51-8.28-5.92-11.24-6.51-10.06-4.73-8.88-2.96-5.92-1.78-.59-1.78,10.65-7.69,9.47-5.33,11.24-4.14,13.61-2.96,3.55-.59h12.43l11.24,1.18,14.79,3.55,8.28,2.96,15.98,7.69,10.65,7.1,9.47,7.1,5.92,5.33,4.73,4.14,4.14,4.14,5.33,6.51,7.1,9.47,4.73,7.69,6.51,12.43,4.14,10.65,2.96,13.61.59,4.14v11.24l-1.78,9.47-2.96,7.69-2.96,5.92-5.92,8.28-6.51,7.69-5.92,7.69-5.33,7.69-4.73,7.69-4.73,8.88-4.14,12.43-1.18,5.92v8.88l1.18,5.92,2.96,7.1,4.14,5.33,5.33,4.73,8.28,4.14,9.47,2.96,10.65,1.78h15.98l11.84-2.37,11.84-3.55,9.47-4.73,8.28-5.33,7.1-6.51,5.33-7.69,2.96-6.51,1.78-9.47-.59-10.06-2.37-9.47-4.14-10.06-5.92-9.47-5.92-8.28-2.37-2.37v-1.18h-1.18v-1.18h-1.18l-.59-2.37,2.96.59,12.43,7.1,8.88,5.92,10.06,7.69,7.1,6.51,4.73,4.14,4.14,4.14,4.14,4.73,7.1,8.28,8.28,11.24,6.51,10.06,5.33,8.88,5.33,9.47,7.69,15.98,4.73,11.84,6.51,19.53,5.33,21.3,3.55,21.3,1.78,18.94.59,9.47v17.75l-1.78,19.53-2.96,17.16-3.55,14.79-5.92,17.75-5.92,13.61-7.1,13.02-5.92,9.47-4.73,6.51-4.73,5.92-5.33,5.92-4.73,5.33h-1.18l-1.18,2.37-1.18,1.18h-436.14l-10.06-10.06-4.14-4.73-7.1-8.28-5.92-7.1-6.51-8.88-10.65-15.98-6.51-10.65-7.1-13.02-6.51-13.61-6.51-15.98-4.14-11.24-5.33-17.75-4.73-21.3-2.96-18.94-1.78-18.94-.59-26.04,1.78-21.9,3.55-21.3,4.14-17.75,5.92-17.75,7.1-17.16,4.73-8.88,4.14-8.28,7.1-11.24,4.73-6.51,8.88-11.84h1.18l1.18-2.37,9.47-10.06,4.73-5.33h1.18l-.59,3.55-2.96,8.88-2.96,16.57-.59,6.51v26.04l1.18,13.02,2.96,15.39,4.14,13.61,4.73,10.65,5.33,8.28,5.92,6.51,5.92,4.14,4.73,2.37,8.28,2.37h7.1l8.88-1.78,10.65-3.55,7.1-4.14,2.96-2.37h1.18l1.18-2.37,4.14-5.92,2.37-5.92,1.18-9.47-1.18-10.06-3.55-13.02-6.51-15.98-8.88-17.75-8.28-14.2-7.69-14.2-7.69-13.61-7.1-14.2-4.73-11.24-3.55-11.24-1.78-10.65-.59-7.1v-18.35l1.18-15.39,2.96-16.57,4.73-17.16,5.92-15.98,7.69-15.98,5.33-9.47,7.1-11.24,6.51-9.47,4.73-5.92,4.14-5.33,6.51-7.69,4.73-5.92,8.88-9.47,1.18-1.78h1.18l1.18-2.37,8.28-8.28,4.73-4.14,8.88-8.28,5.92-5.33,4.73-4.14,6.51-5.33,7.69-6.51,8.28-6.51,7.69-5.92,11.84-8.88,6.51-4.73,11.24-8.28,10.65-7.69,9.47-6.51,4.14-3.55ZM455.67,508.34l-7.69,7.1-4.14,4.14-5.33,7.1-4.14,8.28-1.78,7.69v8.28l2.37,7.69,4.14,7.1,7.1,7.1,6.51,5.33-1.18,2.37-7.69,7.69-8.28,6.51-8.88,6.51-11.24,6.51-7.69,3.55-11.84,3.55-5.33,1.18h-14.79l-9.47-1.78-10.06-3.55-11.84-5.92-8.28-5.92-7.1-5.33-5.92-5.33-1.78-.59,1.18,3.55,3.55,7.69,3.55,10.65,1.78,9.47v7.1l-1.78,8.88-2.96,7.1-5.33,9.47-5.92,8.88-4.14,7.1-2.96,8.28-1.18,4.14v2.37l36.69.59,213.04.59h204.16v-5.92l-2.37-10.06-2.96-7.1-3.55-4.73-4.14-2.37-13.61-7.1-11.24-5.92-28.41-14.2-59.77-28.41-16.57-7.69-2.37.59-7.69,14.2-5.33,8.88-2.37,4.14-2.37-.59-7.1-4.14h-1.18l1.78-4.14,8.88-15.39,4.73-7.69-.59-1.78-8.28-4.14h-2.37l-7.1,13.02-5.92,10.06-1.18,3.55-10.65-5.92v-2.37l7.69-13.02,5.92-10.06-.59-1.78-8.88-4.14-1.78.59-8.28,14.79-5.33,8.88-2.96-1.18-6.51-3.55h-1.18l1.78-4.14,8.88-15.39,2.96-4.73-.59-1.78-14.2-7.1-11.24-5.92-19.53-10.06-13.02-7.1-16.57-8.88-15.98-8.88-11.84-6.51h-2.37ZM308.91,699.48l-.59,1.18,2.96,9.47.59.59,60.95.59,136.11.59,109.48.59h139.07l1.18-3.55,1.78-8.88-.59-.59h-450.94Z", "M288.79,745.64h36.1l6.51,7.69,4.73,5.92,8.28,10.06,31.96,39.06,8.28,10.06,10.65,13.02,8.28,10.06,5.33,6.51,6.51,7.69.59.59.59-110.66h42.61l.59.59v185.23l-.59.59h-35.51l-4.14-4.73-5.33-6.51-7.69-9.47-6.51-7.69-6.51-8.28-6.51-7.69-5.33-6.51-7.69-9.47-7.1-8.28-4.14-5.33-8.28-10.06-5.33-6.51-8.28-10.06-5.33-6.51-3.55-4.14v110.66l-.59.59h-42.61l-.59-2.37v-182.86l.59-1.18Z", "M503.61,745.64h92.91l15.98,1.78,12.43,2.96,13.02,4.73,11.24,5.92,7.69,5.33,6.51,5.33,6.51,6.51,5.92,7.69,4.73,7.69,4.73,10.06,3.55,11.84,1.78,11.24.59,5.92v14.2l-1.78,13.02-3.55,12.43-4.14,10.06-5.33,8.88-5.92,7.69-1.78,2.37h-1.18l-1.18,2.37-5.92,5.33-8.88,6.51-10.65,5.92-10.06,4.14-11.84,3.55-13.61,2.37-7.69.59h-94.09l-.59-8.28v-176.94l.59-1.18ZM547.4,781.74l-.59,8.88.59,105.93h23.67l24.85-.59,10.06-1.78,8.88-2.96,9.47-5.33,5.92-4.73,5.33-5.33,5.33-8.28,3.55-8.88,2.37-13.02v-13.02l-1.78-10.65-2.96-8.88-4.14-7.69-5.33-6.51-5.92-5.33-6.51-4.14-8.88-4.14-8.88-2.37-8.88-1.18h-46.16Z", "M901.28,745.64h86.99l13.02,1.18,11.24,2.37,10.06,3.55,9.47,4.73,7.1,4.73,7.1,6.51,4.73,5.33,4.14,6.51,4.14,8.28,2.37,8.28,1.18,7.69.59,10.65-1.18,10.06-1.78,8.28-3.55,9.47-5.33,8.28-3.55,4.73h-1.18l-1.18,2.37-5.33,4.73-8.88,5.92-5.33,2.96,1.18,2.96,6.51,9.47,9.47,13.61,16.57,23.67,6.51,9.47v.59l-45.57.59-2.96-2.37-4.73-7.1-6.51-9.47-18.94-27.22-3.55-5.33h-39.06v50.3l-.59.59-27.22.59h-13.02l-3.55-1.18v-184.04l.59-1.78ZM946.26,781.15l-1.18.59v63.91h36.69l8.28-.59,8.88-2.37,8.28-4.14,5.33-4.73,3.55-5.92,1.78-5.33,1.18-9.47-1.18-9.47-2.96-7.1-4.14-5.33-5.33-4.14-6.51-2.96-6.51-1.78-3.55-.59-12.43-.59h-30.18Z", "M4.73,745.64h42.61l.59.59.59,84.62,11.24-11.24,4.14-4.73,4.14-4.14.59-1.18h1.18l1.18-2.37,6.51-6.51,4.14-4.73,9.47-9.47,1.18-1.78h1.18l1.18-2.37,8.28-8.28,4.14-4.73,4.73-4.73.59-1.18h1.18l1.18-2.37,5.33-5.33,4.14-4.73,5.33-5.33h48.53l-3.55,4.14-4.14,4.73-1.78,2.37h-1.18l-1.18,2.37-4.14,4.73h-1.18l-1.18,2.37-5.92,5.92-4.14,4.73-2.96,3.55h-1.18l-1.18,2.37-5.33,5.33-4.14,4.73-17.75,18.94-1.18,1.78h-1.18l-1.18,2.37-5.33,5.33-4.14,4.73-2.37,2.37,1.18,2.37,7.69,9.47,5.92,7.69,7.69,9.47,5.92,7.69,6.51,8.28,7.69,9.47,5.92,7.69,7.1,8.88,6.51,8.28,7.69,9.47,6.51,8.28,4.14,5.33v1.18h-50.89l-7.69-9.47-5.33-6.51-6.51-8.28-6.51-7.69-4.73-5.92-5.33-6.51-15.39-18.94-6.51-8.28-2.37.59-4.14,4.73-8.28,8.28-.59,1.18h-1.18l-1.18,2.37-6.51,6.51-.59,1.18-.59,46.16-.59.59H4.73l-.59-.59v-184.64l.59-1.18Z", "M723.16,745.64h140.25l.59.59v34.32l-97.05.59v39.06l85.22.59.59.59v32.55l-.59.59h-85.81v42.61h100.6l.59.59v33.73l-.59.59h-143.8l-.59-22.49v-162.15l.59-1.78Z", "M201.8,745.64h42.61l1.18,2.96v85.22l-.59,98.24h-43.2l-.59-2.96v-181.68l.59-1.78Z", "M688.24,945.67h20.12l6.51,7.69,4.73,5.92,8.28,10.06,6.51,8.28,7.1,8.28,4.73,5.92,6.51,7.69,3.55,4.73h.59v-58.59h23.67v99.42l-.59.59h-18.94l-7.69-8.88-5.33-6.51-8.28-10.06-5.33-6.51-8.28-10.06-5.33-6.51-8.28-10.06-.59,57.99-.59.59h-22.49l-.59-.59v-99.42Z", "M574.03,945.67h19.53l6.51,7.69,4.73,5.92,5.33,6.51,8.28,10.06,7.69,9.47,5.33,6.51,6.51,7.69,3.55,4.73,1.18.59-.59-1.18v-57.4l.59-.59h23.08v99.42l-.59.59h-18.94l-7.69-8.88-6.51-7.69-4.14-5.33-6.51-7.69-4.14-5.33-6.51-7.69-4.73-5.92-6.51-7.69-1.78-2.37-.59,57.99-.59.59h-22.49l-.59-.59v-98.83l.59-.59Z", "M133.15,943.89h13.02l10.65,1.78,8.88,3.55,8.28,4.73,7.69,7.1,4.14,4.73,4.73,8.28,2.96,8.88,1.18,5.33v14.79l-2.37,10.06-4.73,9.47-4.73,6.51-7.1,7.1-7.69,4.73-6.51,2.96-8.28,2.37-5.92,1.18h-15.39l-10.65-2.37-8.88-3.55-6.51-4.14-7.1-5.92-4.73-5.92-4.73-8.28-3.55-10.65-.59-3.55v-14.2l1.78-8.28,2.96-7.69,4.73-7.69,5.33-5.92,4.14-4.14,7.69-4.73,5.92-2.96,7.69-2.37,7.69-1.18ZM138.48,964.01l-8.28,1.18-8.28,4.14-5.92,5.33-3.55,5.33-2.37,5.92-1.18,7.69.59,9.47,2.96,8.28,3.55,5.33,4.73,4.73,9.47,4.73,6.51,1.18h7.1l7.69-1.78,7.69-4.14,5.92-5.92,4.14-8.28,1.78-8.88-.59-9.47-2.96-8.88-4.14-5.92-4.14-4.14-9.47-4.73-7.69-1.18h-3.55Z", "M898.92,945.67h50.3l10.06,1.78,7.69,2.96,8.28,5.33,4.73,5.33,2.96,5.33,2.37,5.92.59,2.96v14.2l-2.96,8.88-4.14,5.92-5.92,5.92-4.14,2.37h-2.37l1.78,4.14,6.51,8.88,8.88,13.02,4.14,5.92v1.18h-24.85l-2.37-2.96-7.69-11.24-4.73-6.51-4.14-5.92-1.18-.59h-8.28l-11.24.59v25.45l-.59,1.18h-23.08l-.59-.59v-99.42ZM922.59,965.19v33.73h24.85l5.92-1.78,4.73-3.55,2.37-2.96,1.78-5.92v-5.33l-1.18-4.73-2.96-4.73-4.73-2.96-5.92-1.78h-24.85Z", "M211.86,945.67h49.12l8.28,1.18,7.69,2.37,8.28,4.73,5.33,4.73,4.14,5.92,2.96,7.69,1.18,7.1v5.33l-1.78,8.88-2.96,6.51-3.55,4.73-4.14,4.14-4.14,2.96-3.55,1.18,4.14,6.51,7.69,11.24,8.28,11.84,1.18,1.18v1.78h-24.85l-7.1-9.47-9.47-14.2-2.96-3.55h-19.53l-.59,2.96v23.08l-.59,1.18h-23.08l-.59-.59v-98.83l.59-.59ZM234.94,965.19v33.73h24.85l7.1-2.37,4.73-4.14,1.78-2.96,1.18-5.92-.59-7.1-2.96-5.92-5.33-3.55-5.92-1.78h-24.85Z", "M356.84,945.67h49.12l10.65,1.78,7.69,2.96,6.51,4.14,4.73,4.14,4.73,7.1,2.96,8.88.59,7.69-1.18,9.47-2.96,7.1-3.55,5.33-5.33,5.33-7.1,4.14,6.51,9.47,9.47,13.61,4.73,6.51.59,2.37h-24.85l-7.1-9.47-4.73-7.1-6.51-9.47-1.18-1.18h-19.53l-.59,2.37v23.67l-.59,1.18h-23.08l-.59-.59v-98.83l.59-.59ZM381.11,964.6l-1.18.59v33.73h24.85l5.92-1.78,4.73-3.55,2.96-4.14,1.18-4.14v-6.51l-2.37-6.51-2.37-2.96-5.33-2.96-4.73-1.18-23.67-.59Z", "M804.23,945.67h75.16l.59.59v17.16l-.59,1.18h-52.08v21.3h46.16l.59,1.18v15.98l-1.18,1.18h-45.57v22.49h53.85l.59.59v17.75l-.59.59h-76.93l-.59-.59v-98.83l.59-.59Z", "M460.41,945.67h23.67l.59,60.36,1.78,8.28,2.96,5.92,4.14,3.55,5.92,2.37,3.55.59h6.51l6.51-1.78,4.73-2.96,3.55-4.73,1.78-4.73,1.18-8.88.59-57.99h23.08l.59.59v56.22l-1.18,12.43-2.96,9.47-4.14,7.1-5.92,6.51-7.69,4.73-7.69,2.96-7.69,1.78h-17.16l-9.47-2.37-7.1-2.96-6.51-4.73-4.73-4.73-4.73-7.69-2.96-8.88-1.18-7.1v-63.32Z", "M1032.07,943.89h14.79l11.84,1.78,11.24,4.14,4.73,2.37.59,1.78-3.55,8.28-2.96,8.28-2.96-.59-10.06-4.14-7.69-1.78-5.33-.59h-6.51l-6.51,1.18-4.73,2.96h-1.18l-1.78,5.33.59,4.14,2.96,3.55,7.69,2.96,20.71,5.33,11.24,4.14,5.92,4.14,4.73,4.73,2.96,6.51,1.18,8.28-1.78,9.47-3.55,6.51-4.73,5.33-7.69,4.73-7.69,2.96-8.88,1.78h-18.35l-11.84-2.37-10.06-3.55-5.92-2.96-3.55-2.96,5.92-13.61,1.78-3.55,3.55,1.18,9.47,4.73,8.28,2.37,8.28,1.18h7.69l7.1-1.18,4.73-2.37,2.37-3.55v-5.33l-1.78-2.96-7.1-3.55-22.49-5.92-11.24-4.14-5.92-4.14-4.14-4.14-3.55-7.1-1.18-5.33v-5.33l1.78-7.69,2.96-5.92,5.33-5.92,5.92-4.14,7.1-2.96,6.51-1.78,4.73-.59Z", "M.59,945.67h75.16l.59.59v17.75l-.59.59-51.48.59v24.85l45.57.59.59,17.16-1.18,1.78H24.26v34.92l-.59,1.18H.59l-.59-.59v-98.83l.59-.59Z"];
+document.getElementById("tm-hdrLogo").innerHTML = HDR_LOGO.map(d => `<path fill="#ef5026" d="${d}"/>`).join("");
+const ASSETS = {k4r:"__T-KINDER__", hs:"__T-HS__", tr:"__T-TR__", bl:"__T-BL__"};
+const W = 1080, H = 1920, FPS = 30, ORANGE = "#ef5026", WHITE = "#ffffff";
+const MONTHS = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
+const INTRO = 3.0, OUTRO = 3.0, EXIT = 0.467;
+const SAMPLE = `MARATÓN BUENOS AIRES
+20/09/2026
+42.195K
+Nanda García 4:04
+
+PANAMA CITY MARATHON
+20/09/2026
+21K
+Christian Zuppicchini 1:37
+Mandri Pinzón 1:53
+Jafeph Betesh 1:56
+Joanny Ballesteros 1:57
+Julio Chandeck 2:19
+Alex Sousa 2:25
+Kiki Quintero 2:28
+Tania Baquero 2:31
+10K
+Aldo López 0:46
+Celina López 1:02
+5K
+José D. Rodríguez 0:26`;
+
+const $ = id => document.getElementById("tm-" + id);
+const store = {get(k){try{return JSON.parse(localStorage.getItem("k4rt-"+k))}catch(e){return null}}, set(k,v){try{localStorage.setItem("k4rt-"+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- images ---------- */
+const IMG = {};
+function loadImg(src){ return new Promise((res,rej)=>{ const i = new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; }); }
+
+/* ---------- parsing ---------- */
+const reTime = /(\d{1,2}:\d{2}(?::\d{2})?|\d{1,2}\s*h\s*\d{2}(?:\s*m(?:in)?)?)\s*$/i;
+const reDist = /^(\d+(?:[.,]\d+)?)\s*(k|km|kms|kilómetros|kilometros|k\.)$/i;
+const reMiles = /^(\d+(?:[.,]\d+)?)\s*(mi|millas|millas?\.?)$/i;
+const reDateNum = /^(\d{1,2})\s*[\/\-.]\s*(\d{1,2})\s*[\/\-.]\s*(\d{2,4})$/;
+const reDateTxt = new RegExp("^(\\d{1,2})\\s*(?:\\/|-|de)?\\s*(" + MONTHS.join("|") + "|SETIEMBRE)\\s*(?:\\/|-|de|del)?\\s*(\\d{4})$", "i");
+
+function normTime(s){
+  s = s.trim().toLowerCase().replace(/\s+/g,"");
+  const m = s.match(/^(\d{1,2})h(\d{2})/); if (m) return `${+m[1]}:${m[2]}`;
+  return s;
+}
+function timeSecs(t){
+  const p = t.split(":").map(Number);
+  if (p.some(isNaN)) return Infinity;
+  return p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p[0]*3600 + p[1]*60;
+}
+function normDate(line){
+  let m = line.match(reDateNum);
+  if (m){ const d=+m[1], mo=+m[2]; let y=+m[3]; if (y<100) y+=2000; if (mo>=1&&mo<=12&&d>=1&&d<=31) return {txt:`${d}/${MONTHS[mo-1]}/${y}`, d, mo, y}; }
+  m = line.toUpperCase().match(reDateTxt);
+  if (m){ let mon = m[2].toUpperCase(); if (mon==="SETIEMBRE") mon="SEPTIEMBRE"; const mo = MONTHS.indexOf(mon)+1; return {txt:`${+m[1]}/${mon}/${m[3]}`, d:+m[1], mo, y:+m[3]}; }
+  return null;
+}
+function normDist(line){
+  const s = line.trim().replace(/\s+/g," ");
+  let m = s.match(reDist); if (m) return m[1].replace(",",".") + "K";
+  m = s.match(reMiles); if (m) return m[1].replace(",",".") + " MILLAS";
+  if (/^(media\s+marat[oó]n|medio\s+marat[oó]n)$/i.test(s)) return "21K";
+  if (/^marat[oó]n$/i.test(s)) return "42.195K";
+  return null;
+}
+function parse(raw, sort){
+  const races = []; let race = null, group = null; let runners = 0; const firstDate = {v:null};
+  const newRace = title => { race = {title, date:"", groups:[]}; races.push(race); group = null; };
+  const ensureGroup = () => { if (!race) newRace(""); if (!group){ group = {dist:"", runners:[]}; race.groups.push(group); } };
+  raw.split(/\r?\n/).forEach(l0 => {
+    const l = l0.replace(/[*_•·]+/g," ").replace(/\s+/g," ").trim();
+    if (!l) return;
+    const dt = normDate(l);
+    if (dt){ if (!race) newRace(""); race.date = dt.txt; if (!firstDate.v) firstDate.v = dt; return; }
+    const ds = normDist(l);
+    if (ds){ if (!race) newRace(""); group = {dist:ds, runners:[]}; race.groups.push(group); return; }
+    const tm = l.match(reTime);
+    if (tm && tm.index > 0){
+      const name = l.slice(0, tm.index).replace(/[\s\-–—:|,=>]+$/,"").trim();
+      if (name){ ensureGroup(); group.runners.push({name:name.toUpperCase(), time:normTime(tm[1])}); runners++; return; }
+    }
+    newRace(l.toUpperCase());
+  });
+  races.forEach(r => { r.groups = r.groups.filter(g => g.runners.length || g.dist); if (sort) r.groups.forEach(g => g.runners.sort((a,b)=>timeSecs(a.time)-timeSecs(b.time))); });
+  return {races: races.filter(r => r.title || r.groups.length), runners, firstDate: firstDate.v};
+}
+
+/* ---------- layout (design units: 1080 × 1920) ---------- */
+/* Bebas Kai is drawn from its own vector outlines (extracted from BebasKai.otf, with its kerning),
+   so the video can never fall back to another typeface, whatever fonts the browser has. */
+const GLYPHS = __T-GLYPHS__;
+const UPM = GLYPHS.upm, CAP = GLYPHS.cap / GLYPHS.upm;
+const GP = {};
+const gpath = ch => GP[ch] || (GP[ch] = new Path2D(GLYPHS.g[ch].p));
+function glyphOf(ch){
+  if (GLYPHS.g[ch]) return ch;
+  const u = ch.toUpperCase(); if (GLYPHS.g[u]) return u;
+  const base = u.normalize("NFD")[0]; if (GLYPHS.g[base]) return base;
+  return GLYPHS.g["?"] ? "?" : " ";
+}
+function run(str){
+  const cs = [...str].map(glyphOf), out = []; let x = 0;
+  cs.forEach((ch, i) => { out.push({ch, x}); x += GLYPHS.g[ch].a; if (i < cs.length-1) x += GLYPHS.k[ch + cs[i+1]] || 0; });
+  return {glyphs: out, width: x};
+}
+function measure(str, size){ return run(str).width * size / UPM; }
+function vbounds(str, size){
+  let top = 0, bot = 0; [...str].map(glyphOf).forEach(ch => { const b = GLYPHS.g[ch].b; top = Math.max(top, b[1]); bot = Math.min(bot, b[0]); });
+  return {asc: top * size / UPM, desc: -bot * size / UPM};
+}
+function drawStr(ctx, str, size, x, baseline, align){
+  const r = run(str), k = size / UPM, w = r.width * k;
+  const x0 = align === "center" ? x - w/2 : align === "right" ? x - w : x;
+  ctx.save(); ctx.translate(x0, baseline); ctx.scale(k, -k);
+  let px = 0;
+  r.glyphs.forEach(g => { ctx.translate(g.x - px, 0); px = g.x; if (GLYPHS.g[g.ch].p) ctx.fill(gpath(g.ch)); });
+  ctx.restore();
+}
+function textEl(str, size, color, align, x, top, maxW){
+  const w0 = measure(str, size); const sx = maxW && w0 > maxW ? maxW / w0 : 1; const w = w0 * sx;
+  const capH = size * CAP;
+  const cx = align === "center" ? x : align === "left" ? x + w/2 : x - w/2;
+  return {kind:"text", str, size, color, align, x, top, sx, w, capH, cx, cy: top + capH/2};
+}
+/* gap from one line's cap top to the next line's cap top, measured on the original 4K videos */
+const OFF = {
+  title:{date:67.5, dist:74, name:74, rule:76, title:76},
+  date:{dist:61.5, name:61.5, rule:66, title:66, date:61.5},
+  dist:{dist:75, name:75, rule:76, title:76, date:75},
+  name:{name:45, dist:65.5, rule:69.5, title:69.5, date:65.5},
+  rule:{title:34, date:34, dist:34, name:34, rule:34}
+};
+const BASE = {title:80, date:52, dist:80, name:51, rule:0};
+const ROOM_TOP = 300, ROOM_BOT = 1610, ROOM = ROOM_BOT - ROOM_TOP;
+function layout(data, yOff, manual){
+  /* fs scales the letters, fg scales the empty space between lines (both relative to the original videos) */
+  const unit = (fs, fg) => {
+    const S = {title:BASE.title*fs, date:BASE.date*fs, dist:BASE.dist*fs, name:BASE.name*fs};
+    const els = []; let order = 0, prev = null;
+    const place = type => prev ? prev.top + (BASE[prev.type]*CAP + (OFF[prev.type][type] - BASE[prev.type]*CAP) * fg) * fs : 0;
+    const put = (type, str, color) => {
+      const top = place(type);
+      const size = S[type];
+      els.push({...textEl(str, size, color, "center", 540, top, 860), order:order++});
+      prev = {type, top, size};
+    };
+    data.races.forEach((r, ri) => {
+      if (ri > 0 && prev){ const y = place("rule"); els.push({kind:"rule", x1:125, x2:955, y, h:3, order:order++}); prev = {type:"rule", top:y, size:0}; }
+      if (r.title) put("title", r.title, WHITE);
+      if (r.date) put("date", r.date, WHITE);
+      r.groups.forEach(g => {
+        if (g.dist) put("dist", g.dist, ORANGE);
+        g.runners.forEach(ru => {
+          const ty = place("name");
+          const tEl = textEl(ru.time, S.name, WHITE, "right", 903, ty);
+          const nEl = textEl(ru.name, S.name, WHITE, "left", 172.5, ty, Math.max(120, 903 - 172.5 - tEl.w - 28));
+          const o = order++; els.push({...nEl, order:o}, {...tEl, order:o});
+          prev = {type:"name", top:ty, size:S.name};
+        });
+      });
+    });
+    return {els, height: prev ? prev.top + prev.size*CAP : 0, order};
+  };
+  let fs = 1, fg = 1;
+  if (manual){ fs = manual.size; fg = manual.gap; }
+  else {
+    const textH = unit(1, 0).height, gapH = unit(1, 1).height - textH, h0 = textH + gapH;
+    if (h0 > ROOM){
+      fg = Math.max(0.75, (ROOM - textH) / gapH);           // tighten the gaps first
+      fs = Math.min(1, ROOM / (textH + fg*gapH));             // then shrink the letters if still too tall
+    } else if (h0 < ROOM * 0.62){
+      const target = ROOM * 0.62;                             // few lines: bigger letters and more air
+      fs = Math.min(1.25, Math.sqrt(target / h0));
+      fg = gapH > 0 ? Math.min(1.7, Math.max(1, (target/fs - textH) / gapH)) : 1;
+    }
+  }
+  let L = unit(fs, fg);
+  if (L.height > ROOM){ const k = ROOM / L.height; fs *= k; L = unit(fs, fg); }
+  L.fs = fs; L.fg = fg;
+  let top = 914 - L.height/2 + yOff;
+  top = Math.max(ROOM_TOP, Math.min(top, ROOM_BOT - L.height));
+  L.els.forEach(e => { if (e.kind === "rule") e.y += top; else { e.top += top; e.cy += top; } });
+  return L;
+}
+
+/* ---------- motion ---------- */
+const clamp = (v,a=0,b=1) => Math.max(a, Math.min(b, v));
+const easeOutQuad = t => 1 - (1-t)*(1-t);
+const easeOutSine = t => Math.sin(t*Math.PI/2);
+const ZA = 1.59, WD = 3.93;
+function spring(t){ if (t <= 0) return 0; return 1 - Math.exp(-ZA*t) * (Math.cos(WD*t) + (ZA/WD)*Math.sin(WD*t)); }
+const EXIT_K = [[0,1],[.067,.94],[.133,.95],[.2,1.08],[.267,1.26],[.333,1.2],[.4,.69],[.467,0]];
+function exitScale(u){
+  if (u <= 0) return 1; if (u >= EXIT) return 0;
+  for (let i = 1; i < EXIT_K.length; i++){ const [a,va] = EXIT_K[i-1], [b,vb] = EXIT_K[i]; if (u <= b){ const k = (u-a)/(b-a); const s = k*k*(3-2*k); return va + (vb-va)*s; } }
+  return 0;
+}
+
+/* ---------- scene ---------- */
+const S = {data:null, L:null, dur:14, showHS:true, endText:"¡FELICIDADES!", stagger:0.1, total:20, endCap:null};
+function timeline(){ return {raceStart: INTRO, raceEnd: INTRO + S.dur, total: INTRO + S.dur + OUTRO}; }
+
+function drawTiles(ctx){
+  ctx.drawImage(IMG.tr, 734.5, 0, 345.5, 346);
+  ctx.drawImage(IMG.bl, 0, 1462, 458, 458);
+}
+function wipe(ctx, img, x, y, w, h, p){
+  if (p <= 0) return;
+  ctx.save(); ctx.beginPath(); ctx.rect(x - 2, y - 4, (w + 4) * p, h + 8); ctx.clip();
+  ctx.drawImage(img, x, y, w, h); ctx.restore();
+}
+function drawLockup(ctx, dy, pK, pH){
+  const kx = S.showHS ? 145.5 : 540 - 158, y = 811.5 + dy;
+  wipe(ctx, IMG.k4r, kx, y, 316, 297.5, pK);
+  if (S.showHS) wipe(ctx, IMG.hs, 550.5, y + 18, 383.5, 263.4, pH);
+}
+function drawText(ctx, e, s){
+  if (s <= 0.002) return;
+  ctx.save();
+  ctx.translate(e.cx, e.cy); ctx.scale(s, s); ctx.translate(-e.cx, -e.cy);
+  ctx.translate(e.x, e.top + e.capH); ctx.scale(e.sx, 1);
+  ctx.fillStyle = e.color; drawStr(ctx, e.str, e.size, 0, 0, e.align); ctx.restore();
+}
+function drawRule(ctx, e, s){
+  if (s <= 0.002) return;
+  const cx = (e.x1 + e.x2)/2, hw = (e.x2 - e.x1)/2 * s;
+  ctx.fillStyle = ORANGE; ctx.fillRect(cx - hw, e.y - e.h/2, hw*2, e.h);
+}
+function drawScene(ctx, t){
+  const T = timeline();
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+  drawTiles(ctx);
+  if (t < T.raceStart){
+    drawLockup(ctx, 0, easeOutQuad(clamp((t - 0.07)/0.6)), easeOutSine(clamp((t - 0.8)/0.95)));
+  } else if (t < T.raceEnd){
+    const u = t - T.raceStart, ex = t - (T.raceEnd - EXIT);
+    S.L.els.forEach(e => {
+      const s = spring(u - 0.033 - e.order * S.stagger) * exitScale(ex);
+      if (e.kind === "rule") drawRule(ctx, e, s); else drawText(ctx, e, s);
+    });
+  } else {
+    const u = t - T.raceEnd;
+    const txt = S.endText.trim().toUpperCase();
+    if (txt && S.endCap){
+      const p = easeOutSine(clamp((u - 0.05)/0.7));
+      const c = S.endCap;
+      if (p > 0){ ctx.save(); ctx.beginPath(); ctx.rect(c.left - 4, c.top - 10, (c.w + 8) * p, c.h + 20); ctx.clip();
+        ctx.fillStyle = WHITE; drawStr(ctx, txt, c.size, 540, c.base, "center"); ctx.restore(); }
+    }
+    drawLockup(ctx, txt ? 52 : 0, easeOutQuad(clamp((u - 0.3)/0.5)), easeOutSine(clamp((u - 0.85)/1.05)));
+  }
+}
+function moving(t){
+  const T = timeline();
+  if (t < 2.0) return true;
+  if (t >= T.raceStart && t < T.raceStart + S.L.order * S.stagger + 2.6) return true;
+  if (t >= T.raceEnd - EXIT - 0.05 && t < T.raceEnd + 2.1) return true;
+  return false;
+}
+/* render at frame time t into ctx (already sized), with optional motion blur */
+function makeRenderer(canvas){
+  const k = canvas.width / W;
+  const ctx = canvas.getContext("2d");
+  const off = document.createElement("canvas"); off.width = canvas.width; off.height = canvas.height;
+  const octx = off.getContext("2d");
+  return function render(t, blur){
+    if (blur && moving(t)){
+      const n = 5, shutter = 0.5 / FPS;
+      for (let i = 0; i < n; i++){
+        const ts = t - shutter/2 + shutter * i/(n-1);
+        octx.setTransform(k,0,0,k,0,0); drawScene(octx, Math.max(0, ts));
+        ctx.setTransform(1,0,0,1,0,0); ctx.globalAlpha = 1/(i+1); ctx.drawImage(off, 0, 0);
+      }
+      ctx.globalAlpha = 1;
+    } else {
+      ctx.setTransform(k,0,0,k,0,0); drawScene(ctx, t);
+    }
+  };
+}
+
+/* ---------- UI state ---------- */
+const cv = $("cv");
+let renderPreview = null, playing = true, t = 0, last = 0;
+function autoDur(){ return S.data && S.data.runners > 2 ? 14 : 7; }
+function fileName(){
+  const d = S.data && S.data.firstDate;
+  const now = new Date();
+  const dd = d ? String(d.d).padStart(2,"0") + String(d.mo).padStart(2,"0") + d.y : String(now.getDate()).padStart(2,"0") + String(now.getMonth()+1).padStart(2,"0") + now.getFullYear();
+  return `Tiempos_${dd}`;
+}
+let fnameTouched = false;
+function rebuild(){
+  const sort = $("sortTimes").checked;
+  S.data = parse($("raw").value, sort);
+  S.showHS = $("showHS").checked;
+  S.endText = $("endText").value;
+  const auto = $("durAuto").checked;
+  $("dur").disabled = auto;
+  if (auto) $("dur").value = autoDur();
+  S.dur = +$("dur").value;
+  $("durOut").textContent = S.dur + " s";
+  $("yOut").textContent = $("yOff").value;
+  const fitAuto = $("fitAuto").checked;
+  $("tSize").disabled = fitAuto; $("tGap").disabled = fitAuto;
+  S.L = layout(S.data, +$("yOff").value, fitAuto ? null : {size: +$("tSize").value/100, gap: +$("tGap").value/100});
+  if (fitAuto){ $("tSize").value = Math.round(S.L.fs*100); $("tGap").value = Math.round(S.L.fg*100); }
+  $("tSizeOut").textContent = Math.round(S.L.fs*100) + "%"; $("tGapOut").textContent = Math.round(S.L.fg*100) + "%";
+  $("fitName").textContent = fitAuto ? `automático · ${Math.round(S.L.fs*100)}%` : "manual";
+  S.stagger = S.L.order > 1 ? Math.min(0.1, 0.9 / (S.L.order - 1)) : 0;
+  // end text box: fit "¡FELICIDADES!"-sized text to the original's 516 px width
+  const txt = S.endText.trim().toUpperCase();
+  if (txt){
+    const ref = 516.5 / measure("¡FELICIDADES!", 100) * 100;
+    let size = ref, w = measure(txt, size);
+    if (w > 900){ size = size * 900 / w; w = measure(txt, size); }
+    const vb = vbounds(txt, size);
+    S.endCap = {size, w, left:540 - w/2, top:677, base:677 + vb.asc, h:vb.asc + vb.desc};
+  } else S.endCap = null;
+  const T = timeline(); S.total = T.total;
+  const p = $("phases").children; p[0].style.flex = INTRO; p[1].style.flex = S.dur; p[2].style.flex = OUTRO;
+  const nR = S.data.races.length, nG = S.data.races.reduce((a,r)=>a+r.groups.length,0);
+  const note = $("parseNote");
+  if (!nR){ note.textContent = "No encontré carreras. Escribe el nombre de la carrera en una línea y cada corredor con su tiempo debajo."; }
+  else {
+    const noTime = S.data.races.filter(r=>!r.date).length;
+    note.textContent = `${nR} ${nR===1?"carrera":"carreras"} · ${nG} ${nG===1?"distancia":"distancias"} · ${S.data.runners} ${S.data.runners===1?"corredor":"corredores"} · video de ${S.total.toFixed(1).replace(".0","")} s` + (noTime ? ` · ${noTime===1?"una carrera no tiene":noTime+" carreras no tienen"} fecha` : "");
+  }
+  if (!fnameTouched) $("fname").value = fileName();
+  const rs = $("res").value === "2160" ? "2160 × 3840" : "1080 × 1920";
+  $("info").textContent = `${rs} px · vertical 9:16 · ${S.total.toFixed(1).replace(".0","")} s · ${$("fname").value || fileName()}.mp4`;
+  if (t > S.total) t = 0;
+  store.set("state", {fit:fitAuto, ts:+$("tSize").value, tg:+$("tGap").value, raw:$("raw").value, sort, hs:S.showHS, end:S.endText, auto, dur:S.dur, y:+$("yOff").value, res:$("res").value, blur:$("blur").checked});
+  if (!playing) drawPreview();
+}
+function drawPreview(){
+  if (!renderPreview) return;
+  renderPreview(t, $("blur").checked);
+  $("scrub").value = Math.round(t / S.total * 1000);
+  $("clock").textContent = `${t.toFixed(1)} / ${S.total.toFixed(1)} s`;
+}
+function setPlaying(p){
+  playing = p;
+  $("play").setAttribute("aria-label", p ? "Pausar" : "Reproducir");
+  $("playIcon").innerHTML = p ? '<rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/>' : '<path d="M4 2l10 6-10 6z"/>';
+  last = performance.now();
+}
+function loop(now){
+  if (playing && !exporting && !document.getElementById("view-tiempos").hidden){
+    t += (now - last)/1000;
+    if (t > S.total + 0.6) t = 0;
+    drawPreview();
+  }
+  last = now;
+  requestAnimationFrame(loop);
+}
+
+/* ---------- export ---------- */
+let exporting = false, cancelFlag = false, lastBlob = null, lastName = "";
+const status = (msg, err) => { const s = $("status"); s.textContent = msg; s.classList.toggle("err", !!err); };
+const setBar = f => { $("bar").firstElementChild.style.width = (f*100).toFixed(1) + "%"; };
+async function pickConfig(w, h){
+  if (!("VideoEncoder" in window) || typeof Mp4Muxer === "undefined") return null;
+  const big = w * h > 1920 * 1088;
+  const codecs = big ? ["avc1.640033","avc1.640034","avc1.4d0033"] : ["avc1.640028","avc1.64002a","avc1.4d0028","avc1.640033"];
+  for (const codec of codecs){
+    const cfg = {codec, width:w, height:h, bitrate: big ? 32e6 : 12e6, framerate:FPS, avc:{format:"avc"}};
+    try { const r = await VideoEncoder.isConfigSupported(cfg); if (r.supported) return cfg; } catch(e){}
+  }
+  return null;
+}
+async function exportVideo(){
+  if (exporting) return;
+  if (!S.data.races.length){ status("Primero pega al menos una carrera con sus tiempos.", true); return; }
+  exporting = true; cancelFlag = false;
+  $("exportBtn").disabled = true; $("cancelBtn").hidden = false; $("againBtn").hidden = true; $("shareBtn").hidden = true; $("bar").hidden = false; setBar(0);
+  const wasPlaying = playing; setPlaying(false);
+  let w = +$("res").value, h = w * 16 / 9;
+  try {
+    let cfg = await pickConfig(w, h);
+    if (!cfg && w > 1080){ w = 1080; h = 1920; cfg = await pickConfig(w, h); if (cfg) status("Este navegador no codifica 4K; exporto en 1080 × 1920."); }
+    let blob, ext;
+    if (cfg) { blob = await encodeWebCodecs(cfg, w, h); ext = "mp4"; }
+    else { ({blob, ext} = await encodeRecorder(1080, 1920)); }
+    if (!blob) { status("Exportación cancelada."); return; }
+    lastBlob = blob; lastName = ($("fname").value.trim() || fileName()).replace(/\.(mp4|webm)$/i,"") + "." + ext;
+    const v = $("outVideo"); if (v.src) URL.revokeObjectURL(v.src); v.src = URL.createObjectURL(blob); $("outWrap").hidden = false;
+    const mb = (blob.size/1048576).toFixed(1);
+    status(`Listo: ${lastName} · ${w} × ${h} · ${mb} MB` + (ext === "webm" ? " · Este navegador solo graba WebM; usa Chrome o Safari para MP4." : ""));
+    await save();
+  } catch(e){
+    console.error(e); status("No pude exportar el video: " + (e && e.message ? e.message : e) + ". Prueba con 1080 × 1920 o en Chrome.", true);
+  } finally {
+    exporting = false; $("exportBtn").disabled = false; $("cancelBtn").hidden = true; $("bar").hidden = true;
+    if (wasPlaying) setPlaying(true); else drawPreview();
+  }
+}
+async function encodeWebCodecs(cfg, w, h, muxCodec = "avc"){
+  const canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h;
+  const render = makeRenderer(canvas);
+  const muxer = new Mp4Muxer.Muxer({target: new Mp4Muxer.ArrayBufferTarget(), video:{codec:muxCodec, width:w, height:h, frameRate:FPS}, fastStart:"in-memory"});
+  let encErr = null;
+  const enc = new VideoEncoder({output:(chunk, meta) => muxer.addVideoChunk(chunk, meta), error:e => { encErr = e; }});
+  enc.configure(cfg);
+  const frames = Math.round(S.total * FPS), blur = $("blur").checked;
+  for (let i = 0; i < frames; i++){
+    if (cancelFlag){ enc.close(); return null; }
+    if (encErr) throw encErr;
+    render(i / FPS, blur);
+    const vf = new VideoFrame(canvas, {timestamp: Math.round(i * 1e6 / FPS), duration: Math.round(1e6 / FPS)});
+    enc.encode(vf, {keyFrame: i % (FPS*2) === 0}); vf.close();
+    while (enc.encodeQueueSize > 6) await new Promise(r => setTimeout(r, 4));
+    if (i % 6 === 0){ setBar(i / frames); status(`Generando video… cuadro ${i} de ${frames}`); await new Promise(r => setTimeout(r, 0)); }
+  }
+  await enc.flush(); if (encErr) throw encErr; enc.close();
+  muxer.finalize(); setBar(1);
+  return new Blob([muxer.target.buffer], {type:"video/mp4"});
+}
+async function encodeRecorder(w, h){
+  if (!("MediaRecorder" in window)) throw new Error("este navegador no puede grabar video");
+  const types = ["video/mp4;codecs=avc1.640028","video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9","video/webm"];
+  const type = types.find(x => MediaRecorder.isTypeSupported(x)); if (!type) throw new Error("no hay formato de video disponible");
+  const canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h;
+  const render = makeRenderer(canvas); render(0, false);
+  const stream = canvas.captureStream(FPS); const rec = new MediaRecorder(stream, {mimeType:type, videoBitsPerSecond:12e6});
+  const chunks = []; rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+  const done = new Promise(r => rec.onstop = r);
+  status("Grabando en tiempo real (este navegador no permite exportación rápida)…");
+  rec.start(250); const t0 = performance.now();
+  await new Promise(resolve => {
+    const step = () => {
+      const tt = (performance.now() - t0)/1000;
+      if (cancelFlag || tt >= S.total){ resolve(); return; }
+      render(tt, $("blur").checked); setBar(tt / S.total); requestAnimationFrame(step);
+    }; requestAnimationFrame(step);
+  });
+  rec.stop(); await done;
+  if (cancelFlag) return {blob:null};
+  const ext = type.startsWith("video/mp4") ? "mp4" : "webm";
+  return {blob: new Blob(chunks, {type: type.split(";")[0]}), ext};
+}
+let downloads = null;
+async function save(){
+  if (!lastBlob) return;
+  if (!downloads){
+    /* outside Claude (the installed app): a normal browser download, plus the share sheet where the phone offers it */
+    const url = URL.createObjectURL(lastBlob);
+    const a = document.createElement("a"); a.href = url; a.download = lastName; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    $("againBtn").hidden = false;
+    try { const f = new File([lastBlob], lastName, {type: lastBlob.type}); if (navigator.canShare && navigator.canShare({files:[f]})) $("shareBtn").hidden = false; } catch(e){}
+    return;
+  }
+  try { await downloads.save({filename:lastName, data:lastBlob}); $("againBtn").hidden = false; }
+  catch(e){ $("againBtn").hidden = false; if (e && e.code === "declined") return; if (e && e.code === "rate_limited") status("Hay una descarga pendiente de confirmar."); }
+}
+
+/* ---------- init ---------- */
+(async function init(){
+  const st = store.get("state");
+  $("raw").value = st && typeof st.raw === "string" && st.raw.trim() ? st.raw : SAMPLE;
+  if (st){
+    $("sortTimes").checked = st.sort !== false; $("showHS").checked = st.hs !== false;
+    if (typeof st.end === "string") $("endText").value = st.end;
+    $("durAuto").checked = st.auto !== false; if (st.dur) $("dur").value = st.dur;
+    if (typeof st.y === "number") $("yOff").value = st.y;
+    $("fitAuto").checked = st.fit !== false; if (st.ts) $("tSize").value = st.ts; if (st.tg) $("tGap").value = st.tg;
+    if (st.res) $("res").value = st.res; $("blur").checked = st.blur !== false;
+  }
+  [IMG.k4r, IMG.hs, IMG.tr, IMG.bl] = await Promise.all([ASSETS.k4r, ASSETS.hs, ASSETS.tr, ASSETS.bl].map(loadImg));
+  renderPreview = makeRenderer(cv);
+  rebuild();
+  ["raw","endText"].forEach(id => $(id).addEventListener("input", rebuild));
+  ["sortTimes","showHS","durAuto","dur","yOff","res","blur","fitAuto","tSize","tGap"].forEach(id => $(id).addEventListener("input", rebuild));
+  $("fname").addEventListener("input", () => { fnameTouched = $("fname").value.trim() !== ""; });
+  $("play").onclick = () => { if (!playing && t >= S.total) t = 0; setPlaying(!playing); };
+  $("scrub").addEventListener("input", () => { setPlaying(false); t = $("scrub").value / 1000 * S.total; drawPreview(); });
+  $("exportBtn").onclick = exportVideo;
+  $("cancelBtn").onclick = () => { cancelFlag = true; };
+  $("againBtn").onclick = save;
+  $("shareBtn").onclick = async () => {
+    if (!lastBlob) return;
+    try { await navigator.share({files:[new File([lastBlob], lastName, {type: lastBlob.type})], title: lastName}); }
+    catch(e){ if (e && e.name !== "AbortError") status("No se pudo compartir. Usa Descargar de nuevo."); }
+  };
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches){ setPlaying(false); t = INTRO + 2.5; }
+  setPlaying(playing); drawPreview(); requestAnimationFrame(loop);
+  if (window.claude && window.claude.use){ try { downloads = await window.claude.use("downloads"); } catch(e){ downloads = null; } }
+})();
+window.__tiempos = {S, drawScene, makeRenderer, parse, timeline, setT: v => { t = v; drawPreview(); }, setPlaying, exportVideo, encodeWebCodecs, pickConfig, get lastBlob(){return lastBlob}};
+
+})();
+</script>

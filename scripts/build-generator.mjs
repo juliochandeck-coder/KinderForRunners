@@ -22,8 +22,30 @@ function fontBytes(name) {
 }
 
 let html = readFileSync(join(root, "generator/template.html"), "utf8");
+
+// Pestaña Tiempos: el fragmento (estilos, controles y animación) y sus imágenes, incrustadas como data URIs.
+const tDir = join(root, "generator/tiempos");
+const dataUri = (file, type) => `data:${type};base64,${readFileSync(join(tDir, file)).toString("base64")}`;
+let tiempos = readFileSync(join(root, "generator/tiempos.html"), "utf8");
+for (const [ph, file, type] of [
+  ["__T-KINDER__", "k4r.png", "image/png"],
+  ["__T-HSINK__", "header-hs-ink.png", "image/png"],
+  ["__T-HSOR__", "header-hs-orange.png", "image/png"],
+  ["__T-HS__", "high-school.png", "image/png"],
+  ["__T-TR__", "tiles-top-right.webp", "image/webp"],
+  ["__T-BL__", "tiles-bottom-left.webp", "image/webp"],
+]) tiempos = tiempos.split(ph).join(dataUri(file, type));
+tiempos = tiempos.split("__T-GLYPHS__").join(readFileSync(join(tDir, "bebas-kai-glyphs.json"), "utf8").trim());
+html = html.replace("__TIEMPOS__", () => tiempos);
+
+// Tipografías libres (licencia OFL, sin cifrar): generator/fonts-ofl/*.woff2 → __Nombre__
+const oflDir = join(root, "generator/fonts-ofl");
+for (const f of readdirSync(oflDir).filter((f) => f.endsWith(".woff2")))
+  html = html.split(`__${f.replace(/\.woff2$/, "")}__`).join(readFileSync(join(oflDir, f)).toString("base64"));
+
+// Tipografías con licencia (cifradas en el repo). Solo se descifran las que la plantilla todavía usa.
 const names = [...new Set(readdirSync(fontsDir).filter((f) => /\.woff2(\.enc)?$/.test(f)).map((f) => f.replace(/\.woff2(\.enc)?$/, "")))];
-for (const name of names) html = html.split(`__${name}__`).join(fontBytes(name).toString("base64"));
+for (const name of names) if (html.includes(`__${name}__`)) html = html.split(`__${name}__`).join(fontBytes(name).toString("base64"));
 html = html.replace("__LOGO__", readFileSync(join(root, "generator/logo.json"), "utf8").trim());
 const left = html.match(/__[A-Za-z-]+__/);
 if (left) throw new Error(`Placeholder sin reemplazar en el generador: ${left[0]}`);
