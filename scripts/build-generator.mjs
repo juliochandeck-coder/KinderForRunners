@@ -2,7 +2,7 @@
 // Las tipografías están cifradas en el repo (generator/fonts/*.woff2.enc) y se descifran aquí con
 // FONTS_KEY (variable de entorno de Netlify). El resultado solo vive en el servidor y la página
 // solo se entrega a usuarios con sesión, así que ningún archivo de fuente queda público.
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createDecipheriv } from "node:crypto";
@@ -27,5 +27,6 @@ for (const name of names) html = html.split(`__${name}__`).join(fontBytes(name).
 html = html.replace("__LOGO__", readFileSync(join(root, "generator/logo.json"), "utf8").trim());
 const left = html.match(/__[A-Za-z-]+__/);
 if (left) throw new Error(`Placeholder sin reemplazar en el generador: ${left[0]}`);
+mkdirSync(join(root, "lib"), { recursive: true });
 writeFileSync(join(root, "lib/generator-html.ts"), `// Archivo generado por scripts/build-generator.mjs. No editar.\nconst html: string = ${JSON.stringify(html)};\nexport default html;\n`);
 console.log(`Generador listo (${(html.length / 1024).toFixed(0)} KB, ${names.length} tipografías)`);
