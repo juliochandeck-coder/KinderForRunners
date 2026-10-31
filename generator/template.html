@@ -1338,7 +1338,7 @@ const DECOS = DECO_GROUPS.flatMap(g=>g[1]);
 const T_ = (name,title,c1,c2,ink,accent,cols,deco) => ({name,title,c1,c2,ink,accent,cols,deco});
 const THEME_GROUPS = [
   ["Panamá", {
-    patrias:  Object.assign(T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","drums","bugles","lyres","pflags","hats"]), {dens:.5}),
+    patrias:  Object.assign(T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","bigstars","confetti","drums","bugles","lyres","pflags","hats"]), {dens:1}),
     madre:    T_("Día de la Madre","MOM RUN!","#ffc2d4","#ff5c8a","#3a0a1a","#c2185b",["#ff5c8a","#ffffff","#ffd166","#c2185b"],["flowers","hearts"]),
     carnaval: T_("Carnaval","CARNAVAL RUN!","#ff006e","#3a86ff","#ffffff","#ffbe0b",["#ffbe0b","#fb5607","#8338ec","#06d6a0"],["streamers","confetti"]),
     folklore: T_("Folklore panameño","RUN TÍPICO!","#1a1a1a","#7a1020","#ffffff","#ffb703",["#e63946","#ffb703","#2a9d8f","#111111"],["mola"]),
@@ -1515,7 +1515,7 @@ const GOLD = "#e7b53f", INK_DARK = "#1c1a17";
 // Estilo plano (tipo ícono): colores sólidos, sin degradados ni perspectiva.
 Object.assign(DRAW_DECO, {
   drums(ctx,c,r,d,z){
-    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y])=>{
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
       const s = (70+r()*25)*z, w = s*1.4, h = s;
       ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.3); ctx.lineCap = "round";
       ctx.strokeStyle = "#f3e6c8"; ctx.lineWidth = s*.08;
@@ -1528,7 +1528,7 @@ Object.assign(DRAW_DECO, {
     });
   },
   bugles(ctx,c,r,d,z){
-    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y],i)=>{
       const s = (80+r()*30)*z; ctx.save(); ctx.translate(x,y); ctx.rotate(-.35 + (r()-.5)*.3); if (i%2) ctx.scale(-1,1);
       ctx.strokeStyle = GOLD; ctx.fillStyle = GOLD; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = s*.08;
       ctx.beginPath(); ctx.moveTo(-s,0); ctx.lineTo(s*.3,0); ctx.arc(s*.3,s*.2,s*.2,-Math.PI/2,Math.PI/2); ctx.lineTo(-s*.45,s*.4); ctx.arc(-s*.45,s*.28,s*.12,Math.PI/2,Math.PI*1.5); ctx.lineTo(s*.2,s*.16); ctx.stroke();
@@ -1540,7 +1540,7 @@ Object.assign(DRAW_DECO, {
     });
   },
   lyres(ctx,c,r,d,z){
-    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y])=>{
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
       const s = (75+r()*25)*z; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.3);
       ctx.fillStyle = c[0]; ctx.beginPath(); ctx.moveTo(0,-s*1.0); ctx.quadraticCurveTo(s*.22,-s*1.35,0,-s*1.65); ctx.quadraticCurveTo(-s*.22,-s*1.35,0,-s*1.0); ctx.fill();
       ctx.strokeStyle = GOLD; ctx.lineWidth = s*.09; ctx.lineCap = "round";
@@ -1553,7 +1553,7 @@ Object.assign(DRAW_DECO, {
   },
   pflags(ctx,c,r,d,z){
     const BLUE = "#005293", RED = "#d21034";
-    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y])=>{
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
       const fw = (115+r()*35)*z, fh = fw*2/3; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.25);
       ctx.fillStyle = GOLD; ctx.fillRect(-fw/2-7*z,-fh/2-6*z,6*z,fh*2.1);
       ctx.fillStyle = "#ffffff"; ctx.fillRect(-fw/2,-fh/2,fw,fh);
@@ -1565,7 +1565,7 @@ Object.assign(DRAW_DECO, {
     });
   },
   hats(ctx,c,r,d,z){
-    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y])=>{
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
       const s = (80+r()*25)*z, straw = "#efe3c4"; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.3);
       ctx.fillStyle = straw; rrect(ctx,-s,s*.12,s*2,s*.18,s*.09); ctx.fill();
       ctx.beginPath(); ctx.moveTo(-s*.5,s*.14); ctx.lineTo(-s*.42,-s*.38); ctx.quadraticCurveTo(0,-s*.6,s*.42,-s*.38); ctx.lineTo(s*.5,s*.14); ctx.closePath(); ctx.fill();
