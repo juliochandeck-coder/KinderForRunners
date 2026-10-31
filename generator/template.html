@@ -1330,16 +1330,15 @@ const DECO_GROUPS = [
   ["Navidad e invierno", [["lights","Luces"],["ornaments","Esferas colgantes"],["snow","Copos de nieve"],["trees","Pinos"]]],
   ["Fiesta", [["confetti","Confeti"],["streamers","Serpentinas"],["balloons","Globos"],["fireworks","Fuegos artificiales"],["stars","Destellos"],["bigstars","Estrellas grandes"],["bunting","Banderines"]]],
   ["Amor y causas", [["hearts","Corazones"],["flowers","Flores"],["ribbons","Lazos"],["mustaches","Bigotes"]]],
-  ["Culturas", [["mola","Marco inspirado en molas"],["picado","Papel picado"],["lanterns","Faroles"],["diamonds","Rombos"],["shamrocks","Tréboles"],["eggs","Huevos de Pascua"],["pumpkins","Calabazas"],["bats","Murciélagos"]]],
+  ["Culturas", [["mola","Marco inspirado en molas"],["picado","Papel picado"],["lanterns","Faroles"],["diamonds","Rombos"],["shamrocks","Tréboles"],["eggs","Huevos de Pascua"],["pumpkins","Calabazas"],["bats","Murciélagos"],["drums","Tambores"],["bugles","Clarines"],["lyres","Liras"],["pflags","Banderas de Panamá"],["hats","Sombreros pintaos"]]],
   ["Clima y naturaleza", [["sun","Sol"],["palms","Palmeras"],["rain","Lluvia"],["waves","Olas"],["leaves","Hojas"]]],
-  ["Deporte", [["checkered","Bandera a cuadros"],["medals","Medallas"],["balls","Balones"]]],
-  ["Noviembre en Panamá", [["drums","Tambores"],["bugles","Clarines"],["lyres","Liras"],["pflags","Banderas de Panamá"],["hats","Sombreros pintaos"]]]
+  ["Deporte", [["checkered","Bandera a cuadros"],["medals","Medallas"],["balls","Balones"]]]
 ];
 const DECOS = DECO_GROUPS.flatMap(g=>g[1]);
 const T_ = (name,title,c1,c2,ink,accent,cols,deco) => ({name,title,c1,c2,ink,accent,cols,deco});
 const THEME_GROUPS = [
   ["Panamá", {
-    patrias:  T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","drums","bugles","lyres"]),
+    patrias:  Object.assign(T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","drums","bugles","lyres","pflags","hats"]), {dens:.5}),
     madre:    T_("Día de la Madre","MOM RUN!","#ffc2d4","#ff5c8a","#3a0a1a","#c2185b",["#ff5c8a","#ffffff","#ffd166","#c2185b"],["flowers","hearts"]),
     carnaval: T_("Carnaval","CARNAVAL RUN!","#ff006e","#3a86ff","#ffffff","#ffbe0b",["#ffbe0b","#fb5607","#8338ec","#06d6a0"],["streamers","confetti"]),
     folklore: T_("Folklore panameño","RUN TÍPICO!","#1a1a1a","#7a1020","#ffffff","#ffb703",["#e63946","#ffb703","#2a9d8f","#111111"],["mola"]),
@@ -1503,14 +1502,13 @@ Object.assign(DRAW_DECO, {
 
 
 // Elementos de noviembre en Panamá (bandas de desfile y símbolos patrios). Se ubican en los bordes para no tapar la rutina.
+// Lugares en los bordes que comparten todos los elementos, para que no se amontonen ni tapen el logo.
+const EDGE_SPOTS = [[.11,.50],[.89,.42],[.12,.85],[.88,.85],[.11,.68],[.89,.66],[.11,.30],[.90,.22]]; // izquierda y derecha alternadas
+let EDGE = {i:0, order:EDGE_SPOTS.map((_,k)=>k)};
+function resetEdgeSpots(seed){ const n = EDGE_SPOTS.length, start = ((seed-1)*2) % n; EDGE = {i:0, order:EDGE_SPOTS.map((_,k)=>(start+k)%n)}; } // "Acomodo" rota los lugares
 function edgeSpots(r, n, z){
   const out = [];
-  for (let i=0;i<n;i++){
-    const side = i % 3, m = 90*z;
-    if (side===0) out.push([m + r()*W*.12, 260 + r()*(H-520)]);
-    else if (side===1) out.push([W - m - r()*W*.12, 260 + r()*(H-520)]);
-    else { const left = r() < .5; out.push([left ? W*(.05 + r()*.17) : W*(.78 + r()*.17), H - m - 40*z - r()*60*z]); } // esquinas de abajo, lejos del logo
-  }
+  for (let k=0;k<n;k++){ const [fx,fy] = EDGE_SPOTS[EDGE.order[EDGE.i++ % EDGE_SPOTS.length]]; out.push([fx*W + (r()-.5)*30*z, fy*H + (r()-.5)*40*z]); }
   return out;
 }
 const GOLD = "#e7b53f", INK_DARK = "#1c1a17";
@@ -1579,6 +1577,7 @@ Object.assign(DRAW_DECO, {
 });
 
 function drawDecor(ctx, s){
+  resetEdgeSpots(s.decoSeed||1);
   const on = DECOS.filter(([k])=>s.deco && s.deco[k]); if (!on.length) return;
   const c = decoCols(s);
   on.forEach(([k],i)=>{ ctx.save(); ctx.globalAlpha = s.decoOpacity; DRAW_DECO[k](ctx,c,rng(1000*(i+1)+k.length*31+s.decoSeed*977),s.decoDensity,s.decoScale); ctx.restore(); });
@@ -1734,7 +1733,7 @@ function applyTheme(id){
   const th = THEMES[id], s = st.style;
   s.theme = id;
   if (id === "none"){ s.deco = {}; s.decoColors = null; s.themeTitle = false; $("title").value = DAYS[st.day].t; syncControls(); renderAll(); return; }
-  s.deco = Object.fromEntries(th.deco.map(k=>[k,true])); s.decoColors = th.cols.slice();
+  s.deco = Object.fromEntries(th.deco.map(k=>[k,true])); s.decoColors = th.cols.slice(); s.decoDensity = th.dens || 1;
   s.themeColors = $("thColors").checked;
   if (s.themeColors) Object.assign(s,{c1:th.c1,c2:th.c2,ink:th.ink,accent:th.accent,palette:null, bgType: s.bgType==="photo" ? "photo" : (s.bgType==="solid" ? "linear" : s.bgType)});
   s.themeTitle = $("thTitle").checked; if (s.themeTitle) $("title").value = th.title;
