@@ -1332,13 +1332,14 @@ const DECO_GROUPS = [
   ["Amor y causas", [["hearts","Corazones"],["flowers","Flores"],["ribbons","Lazos"],["mustaches","Bigotes"]]],
   ["Culturas", [["mola","Marco inspirado en molas"],["picado","Papel picado"],["lanterns","Faroles"],["diamonds","Rombos"],["shamrocks","Tréboles"],["eggs","Huevos de Pascua"],["pumpkins","Calabazas"],["bats","Murciélagos"]]],
   ["Clima y naturaleza", [["sun","Sol"],["palms","Palmeras"],["rain","Lluvia"],["waves","Olas"],["leaves","Hojas"]]],
-  ["Deporte", [["checkered","Bandera a cuadros"],["medals","Medallas"],["balls","Balones"]]]
+  ["Deporte", [["checkered","Bandera a cuadros"],["medals","Medallas"],["balls","Balones"]]],
+  ["Noviembre en Panamá", [["drums","Tambores"],["bugles","Clarines"],["lyres","Liras"],["pflags","Banderas de Panamá"],["hats","Sombreros pintaos"]]]
 ];
 const DECOS = DECO_GROUPS.flatMap(g=>g[1]);
 const T_ = (name,title,c1,c2,ink,accent,cols,deco) => ({name,title,c1,c2,ink,accent,cols,deco});
 const THEME_GROUPS = [
   ["Panamá", {
-    patrias:  T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","bigstars","confetti"]),
+    patrias:  T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","drums","bugles","lyres"]),
     madre:    T_("Día de la Madre","MOM RUN!","#ffc2d4","#ff5c8a","#3a0a1a","#c2185b",["#ff5c8a","#ffffff","#ffd166","#c2185b"],["flowers","hearts"]),
     carnaval: T_("Carnaval","CARNAVAL RUN!","#ff006e","#3a86ff","#ffffff","#ffbe0b",["#ffbe0b","#fb5607","#8338ec","#06d6a0"],["streamers","confetti"]),
     folklore: T_("Folklore panameño","RUN TÍPICO!","#1a1a1a","#7a1020","#ffffff","#ffb703",["#e63946","#ffb703","#2a9d8f","#111111"],["mola"]),
@@ -1498,6 +1499,115 @@ Object.assign(DRAW_DECO, {
       const pent=(px,py,pr,rot)=>{ ctx.beginPath(); for (let k=0;k<5;k++){ const a=rot+k*Math.PI*2/5-Math.PI/2; ctx.lineTo(px+Math.cos(a)*pr,py+Math.sin(a)*pr); } ctx.closePath(); ctx.fill(); };
       pent(0,0,R*.36,0); for (let k=0;k<5;k++){ const a=k*Math.PI*2/5-Math.PI/2; pent(Math.cos(a)*R*.95,Math.sin(a)*R*.95,R*.34,a+Math.PI); }
       ctx.restore(); ctx.strokeStyle="rgba(0,0,0,.35)"; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.stroke(); } }
+});
+
+
+// Elementos de noviembre en Panamá (bandas de desfile y símbolos patrios). Se ubican en los bordes para no tapar la rutina.
+function edgeSpots(r, n, z){
+  const out = [];
+  for (let i=0;i<n;i++){
+    const side = i % 3, m = 90*z;
+    if (side===0) out.push([m + r()*W*.12, 260 + r()*(H-520)]);
+    else if (side===1) out.push([W - m - r()*W*.12, 260 + r()*(H-520)]);
+    else { const left = r() < .5; out.push([left ? W*(.05 + r()*.17) : W*(.78 + r()*.17), H - m - 40*z - r()*60*z]); } // esquinas de abajo, lejos del logo
+  }
+  return out;
+}
+const BRASS = ["#7a5410","#e0b04a","#fff1b8","#c48a1c","#6b4508"];
+function brassGrad(ctx, x0, y0, x1, y1){ const g = ctx.createLinearGradient(x0,y0,x1,y1); BRASS.forEach((c,i)=>g.addColorStop(i/(BRASS.length-1),c)); return g; }
+Object.assign(DRAW_DECO, {
+  drums(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+      const s = (70+r()*30)*z, w = s*1.5, h = s*1.05, ry = s*.28;
+      ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.35);
+      // baquetas cruzadas
+      ctx.lineCap = "round"; ctx.strokeStyle = "#e9d3a6"; ctx.lineWidth = s*.09;
+      [[-1,1],[1,-1]].forEach(([a,b])=>{ ctx.beginPath(); ctx.moveTo(a*w*.55,-h*.5-ry-s*.55); ctx.lineTo(b*w*.12,-h*.5-ry*.2); ctx.stroke(); });
+      ctx.fillStyle = "#f6ead0"; [[-1],[1]].forEach(([a])=>{ ctx.beginPath(); ctx.arc(a*w*.55,-h*.5-ry-s*.55,s*.08,0,Math.PI*2); ctx.fill(); });
+      // cuerpo
+      const body = ctx.createLinearGradient(-w/2,0,w/2,0); body.addColorStop(0,mix(c[0],"#000000",.35)); body.addColorStop(.45,mix(c[0],"#ffffff",.15)); body.addColorStop(1,mix(c[0],"#000000",.4));
+      ctx.fillStyle = body; ctx.beginPath(); ctx.moveTo(-w/2,-h/2); ctx.lineTo(-w/2,h/2); ctx.ellipse(0,h/2,w/2,ry,0,Math.PI,0,true); ctx.lineTo(w/2,-h/2); ctx.closePath(); ctx.fill();
+      // cuerdas en zigzag
+      ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.lineWidth = s*.035; ctx.beginPath();
+      for (let k=0;k<=8;k++){ const px = -w/2 + k*w/8, py = k%2 ? h/2 - ry*.2 : -h/2 + ry*.2; const sag = Math.sin(Math.acos(Math.max(-1,Math.min(1,px/(w/2)))))*ry; k ? ctx.lineTo(px, py + (k%2?sag:sag*.6)) : ctx.moveTo(px, py + sag*.6); }
+      ctx.stroke();
+      // aros
+      ctx.strokeStyle = brassGrad(ctx,-w/2,0,w/2,0); ctx.lineWidth = s*.1;
+      ctx.beginPath(); ctx.ellipse(0,h/2,w/2,ry,0,0,Math.PI); ctx.stroke();
+      // parche
+      ctx.fillStyle = "#f4f1ea"; ctx.beginPath(); ctx.ellipse(0,-h/2,w/2,ry,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(0,-h/2,w/2,ry,0,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    });
+  },
+  bugles(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+      const s = (85+r()*35)*z; ctx.save(); ctx.translate(x,y); ctx.rotate(-.5 + (i%2?.9:0) + (r()-.5)*.3); if (i%2) ctx.scale(-1,1);
+      const g = brassGrad(ctx,-s,-s*.3,s,s*.3); ctx.strokeStyle = g; ctx.fillStyle = g; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      // tubo con una vuelta
+      ctx.lineWidth = s*.075; ctx.beginPath(); ctx.moveTo(-s*1.05,0); ctx.lineTo(s*.35,0);
+      ctx.moveTo(s*.35,0); ctx.bezierCurveTo(s*.75,0,s*.75,s*.42,s*.35,s*.42); ctx.lineTo(-s*.55,s*.42); ctx.bezierCurveTo(-s*.85,s*.42,-s*.85,s*.16,-s*.55,s*.16); ctx.lineTo(s*.25,s*.16); ctx.stroke();
+      // campana
+      ctx.beginPath(); ctx.moveTo(s*.2,s*.16-s*.04); ctx.bezierCurveTo(s*.6,s*.14,s*.85,s*.02,s*1.0,-s*.12); ctx.lineTo(s*1.0,s*.44); ctx.bezierCurveTo(s*.85,s*.3,s*.6,s*.2,s*.2,s*.2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = mix(BRASS[0],"#000000",.2); ctx.beginPath(); ctx.ellipse(s*1.0,s*.16,s*.06,s*.28,0,0,Math.PI*2); ctx.fill();
+      // boquilla
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(-s*1.08,0,s*.05,s*.08,0,0,Math.PI*2); ctx.fill();
+      // cordón con borla
+      ctx.strokeStyle = c[0]; ctx.lineWidth = s*.03; ctx.beginPath(); ctx.moveTo(-s*.4,s*.03); ctx.quadraticCurveTo(-s*.15,s*.75,s*.15,s*.43); ctx.stroke();
+      ctx.fillStyle = c[0]; ctx.beginPath(); ctx.moveTo(-s*.12,s*.62); ctx.lineTo(-s*.2,s*.86); ctx.lineTo(-s*.02,s*.86); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    });
+  },
+  lyres(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+      const s = (80+r()*30)*z; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.4);
+      // penacho
+      ctx.fillStyle = c[0]; ctx.beginPath(); ctx.moveTo(0,-s*1.05); ctx.bezierCurveTo(s*.25,-s*1.35,s*.05,-s*1.6,0,-s*1.75); ctx.bezierCurveTo(-s*.05,-s*1.6,-s*.25,-s*1.35,0,-s*1.05); ctx.fill();
+      // marco en forma de lira
+      ctx.strokeStyle = brassGrad(ctx,-s*.6,0,s*.6,0); ctx.lineWidth = s*.08; ctx.lineCap = "round";
+      [1,-1].forEach(sg=>{ ctx.beginPath(); ctx.moveTo(0,s*.75); ctx.bezierCurveTo(sg*s*.75,s*.6,sg*s*.75,-s*.1,sg*s*.38,-s*.55); ctx.bezierCurveTo(sg*s*.15,-s*.85,sg*s*.45,-s*1.05,sg*s*.62,-s*.9); ctx.stroke();
+        ctx.fillStyle = BRASS[1]; ctx.beginPath(); ctx.arc(sg*s*.62,-s*.9,s*.07,0,Math.PI*2); ctx.fill(); });
+      // láminas metálicas
+      for (let k=0;k<8;k++){ const yy = -s*.45 + k*s*.13, half = s*(.46 - k*.03); const g = ctx.createLinearGradient(0,yy-s*.04,0,yy+s*.04); g.addColorStop(0,"#ffffff"); g.addColorStop(1,"#9aa3ad");
+        ctx.fillStyle = g; rrect(ctx,-half,yy-s*.035,half*2,s*.07,s*.03); ctx.fill(); }
+      // mango y borla
+      ctx.fillStyle = BRASS[3]; ctx.fillRect(-s*.045,s*.72,s*.09,s*.45);
+      ctx.fillStyle = c[0]; ctx.beginPath(); ctx.moveTo(-s*.1,s*.78); ctx.lineTo(s*.1,s*.78); ctx.lineTo(s*.16,s*1.12); ctx.lineTo(-s*.16,s*1.12); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    });
+  },
+  pflags(ctx,c,r,d,z){
+    const BLUE = "#005293", RED = "#d21034";
+    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+      const fw = (120+r()*40)*z, fh = fw*2/3; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.3 + (i%2?.12:-.12));
+      ctx.fillStyle = "#c9a227"; ctx.fillRect(-fw/2-6*z,-fh/2-4*z,5*z,fh*2.2); ctx.beginPath(); ctx.arc(-fw/2-3.5*z,-fh/2-8*z,7*z,0,Math.PI*2); ctx.fill();
+      // bandera ondeando: se dibuja por franjas verticales desplazadas
+      const cols = 24;
+      for (let k=0;k<cols;k++){ const x0 = -fw/2 + k*fw/cols, wave = Math.sin(k/cols*Math.PI*1.6)*fh*.07, cw = fw/cols+1;
+        const top = k < cols/2, ty = -fh/2 + wave;
+        ctx.fillStyle = top ? "#ffffff" : RED; ctx.fillRect(x0, ty, cw, fh/2);
+        ctx.fillStyle = top ? BLUE : "#ffffff"; ctx.fillRect(x0, ty+fh/2, cw, fh/2); }
+      const wv = k => Math.sin(k*Math.PI*1.6)*fh*.07;
+      ctx.fillStyle = BLUE; starPath(ctx,-fw/4,-fh/4+wv(.25),fh*.13); ctx.fill();
+      ctx.fillStyle = RED; starPath(ctx,fw/4,fh/4+wv(.75),fh*.13); ctx.fill();
+      ctx.restore();
+    });
+  },
+  hats(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(2*d)), z).forEach(([x,y],i)=>{
+      const s = (85+r()*30)*z, straw = "#efe3c4", dark = "#1c1a17"; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.35);
+      // ala
+      ctx.fillStyle = straw; ctx.beginPath(); ctx.ellipse(0,s*.2,s,s*.32,0,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle = dark; ctx.lineWidth = s*.05; [.92,.78,.64].forEach(f=>{ ctx.beginPath(); ctx.ellipse(0,s*.2,s*f,s*.32*f,0,0,Math.PI*2); ctx.stroke(); });
+      // copa
+      ctx.fillStyle = straw; ctx.beginPath(); ctx.moveTo(-s*.45,s*.18); ctx.bezierCurveTo(-s*.5,-s*.35,-s*.25,-s*.5,0,-s*.5); ctx.bezierCurveTo(s*.25,-s*.5,s*.5,-s*.35,s*.45,s*.18); ctx.closePath(); ctx.fill();
+      ctx.save(); ctx.clip();
+      for (let k=0;k<5;k++){ ctx.fillStyle = k%2 ? straw : dark; ctx.fillRect(-s*.6,-s*.5+k*s*.14,s*1.2,s*.07); }
+      ctx.restore();
+      ctx.strokeStyle = dark; ctx.lineWidth = s*.04; ctx.beginPath(); ctx.ellipse(0,s*.17,s*.46,s*.1,0,0,Math.PI); ctx.stroke();
+      ctx.restore();
+    });
+  }
 });
 
 function drawDecor(ctx, s){
