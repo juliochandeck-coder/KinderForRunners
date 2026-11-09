@@ -1330,7 +1330,7 @@ const DECO_GROUPS = [
   ["Navidad e invierno", [["lights","Luces"],["ornaments","Esferas colgantes"],["snow","Copos de nieve"],["trees","Pinos"]]],
   ["Fiesta", [["confetti","Confeti"],["streamers","Serpentinas"],["balloons","Globos"],["fireworks","Fuegos artificiales"],["stars","Destellos"],["bigstars","Estrellas grandes"],["bunting","Banderines"]]],
   ["Amor y causas", [["hearts","Corazones"],["flowers","Flores"],["ribbons","Lazos"],["mustaches","Bigotes"]]],
-  ["Culturas", [["mola","Marco inspirado en molas"],["picado","Papel picado"],["lanterns","Faroles"],["diamonds","Rombos"],["shamrocks","Tréboles"],["eggs","Huevos de Pascua"],["pumpkins","Calabazas"],["bats","Murciélagos"],["drums","Tambores"],["bugles","Clarines"],["lyres","Liras"],["pflags","Banderas de Panamá"],["hats","Sombreros pintaos"],["bells","Campanas"],["seal1821","Sello 10 de noviembre"]]],
+  ["Culturas", [["mola","Marco inspirado en molas"],["picado","Papel picado"],["lanterns","Faroles"],["diamonds","Rombos"],["shamrocks","Tréboles"],["eggs","Huevos de Pascua"],["pumpkins","Calabazas"],["bats","Murciélagos"],["drums","Tambores"],["bugles","Clarines"],["lyres","Liras"],["pflags","Banderas de Panamá"],["hats","Sombreros pintaos"],["bells","Campanas"],["seal1821","Sello 10 de noviembre"],["rufina","Rufina Alfaro"],["monument","Monumento a Rufina Alfaro"],["lsflags","Banderas de Los Santos"]]],
   ["Clima y naturaleza", [["sun","Sol"],["palms","Palmeras"],["rain","Lluvia"],["waves","Olas"],["leaves","Hojas"]]],
   ["Deporte", [["checkered","Bandera a cuadros"],["medals","Medallas"],["balls","Balones"]]]
 ];
@@ -1339,7 +1339,7 @@ const T_ = (name,title,c1,c2,ink,accent,cols,deco) => ({name,title,c1,c2,ink,acc
 const THEME_GROUPS = [
   ["Panamá", {
     patrias:  Object.assign(T_("Fiestas Patrias","PATRIA RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","bigstars","confetti","drums","bugles","lyres","pflags","hats"]), {dens:1}),
-    grito:    Object.assign(T_("Grito de La Villa (10 nov)","GRITO RUN!","#0b2a6f","#d21034","#ffffff","#ffffff",["#d21034","#ffffff","#0b47a1","#ffffff"],["bunting","seal1821","bells","pflags","hats","confetti"]), {dens:1}),
+    grito:    Object.assign(T_("Grito de La Villa (10 nov)","SHOUT RUN!","#003893","#c60a1e","#ffffff","#ffc400",["#c60a1e","#ffc400","#003893","#ffffff"],["bunting","seal1821","rufina","monument","lsflags","confetti"]), {dens:1}),
     madre:    T_("Día de la Madre","MOM RUN!","#ffc2d4","#ff5c8a","#3a0a1a","#c2185b",["#ff5c8a","#ffffff","#ffd166","#c2185b"],["flowers","hearts"]),
     carnaval: T_("Carnaval","CARNAVAL RUN!","#ff006e","#3a86ff","#ffffff","#ffbe0b",["#ffbe0b","#fb5607","#8338ec","#06d6a0"],["streamers","confetti"]),
     folklore: T_("Folklore panameño","RUN TÍPICO!","#1a1a1a","#7a1020","#ffffff","#ffb703",["#e63946","#ffb703","#2a9d8f","#111111"],["mola"]),
@@ -1604,6 +1604,52 @@ Object.assign(DRAW_DECO, {
       const bot = Math.min(R*.12, fit(ctx,"LA VILLA DE LOS SANTOS",ff("gBold"),R*1.2,R*.12,0,6));
       ctx.font = ff("gBold")(bot); ctx.fillText("LA VILLA DE LOS SANTOS",0,R*.44);
       ctx.fillStyle = c[2] || "#0b47a1"; starPath(ctx,-R*.58,R*.04,R*.09); ctx.fill(); starPath(ctx,R*.58,R*.04,R*.09); ctx.fill();
+      ctx.restore();
+    });
+  }
+});
+
+// Rufina Alfaro y su monumento en La Villa de Los Santos, en estilo plano. Pies en (0,0); mide unas 3.2 unidades de alto.
+function drawHeroine(ctx, s, col){
+  ctx.fillStyle = col.hair; ctx.beginPath(); ctx.ellipse(-s*.05,-s*2.1,s*.5,s*.95,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = col.skirt; ctx.beginPath(); ctx.moveTo(-s*.38,-s*1.38); ctx.lineTo(s*.38,-s*1.38); ctx.lineTo(s*1.08,-s*.05); ctx.quadraticCurveTo(0,s*.12,-s*1.08,-s*.05); ctx.closePath(); ctx.fill();
+  if (col.stripe){ ctx.strokeStyle = col.stripe; ctx.lineWidth = s*.05; for (let k=-3;k<=3;k++){ ctx.beginPath(); ctx.moveTo(k*s*.1,-s*1.3); ctx.lineTo(k*s*.3,-s*.08); ctx.stroke(); } }
+  ctx.strokeStyle = col.skin; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineWidth = s*.2;
+  ctx.beginPath(); ctx.moveTo(s*.55,-s*1.9); ctx.lineTo(s*.92,-s*2.75); ctx.stroke();
+  ctx.fillStyle = col.skin; ctx.beginPath(); ctx.arc(s*.96,-s*2.92,s*.19,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-s*.58,-s*1.85); ctx.lineTo(-s*.62,-s*1.42); ctx.lineTo(-s*.32,-s*1.36); ctx.stroke();
+  ctx.fillStyle = col.blouse; ctx.beginPath(); ctx.ellipse(0,-s*1.86,s*.82,s*.24,0,0,Math.PI*2); ctx.fill(); ctx.fillRect(-s*.4,-s*1.86,s*.8,s*.5);
+  if (col.ruffle){ ctx.strokeStyle = col.ruffle; ctx.lineWidth = s*.04; ctx.beginPath(); ctx.ellipse(0,-s*1.86,s*.82,s*.24,0,.15,Math.PI-.15); ctx.stroke(); }
+  ctx.fillStyle = col.skin; ctx.beginPath(); ctx.arc(0,-s*2.38,s*.32,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = col.hair; ctx.beginPath(); ctx.arc(0,-s*2.42,s*.34,Math.PI*1.02,Math.PI*1.98); ctx.fill();
+}
+Object.assign(DRAW_DECO, {
+  rufina(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
+      const s = (62+r()*12)*z; ctx.save(); ctx.translate(x,y+s*1.5); ctx.rotate((r()-.5)*.12);
+      drawHeroine(ctx, s, {hair:"#3b2416", skin:"#c98a5e", blouse:"#ffffff", ruffle:"#e6e1d8", skirt:c[0], stripe:mix(c[0],"#ffffff",.25)});
+      ctx.restore();
+    });
+  },
+  monument(ctx,c,r,d,z){
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
+      const s = (55+r()*10)*z; ctx.save(); ctx.translate(x,y+s*1.1);
+      const pw = s*2.5, ph = s*.75; ctx.fillStyle = "#7d2b2b"; ctx.fillRect(-pw/2,0,pw,ph);
+      ctx.fillStyle = "#e9e4dc"; ctx.fillRect(-pw/2-s*.06,-s*.08,pw+s*.12,s*.12);
+      ctx.strokeStyle = "#5c1d1d"; ctx.lineWidth = s*.03;
+      for (let row=1; row<3; row++){ ctx.beginPath(); ctx.moveTo(-pw/2,row*ph/3); ctx.lineTo(pw/2,row*ph/3); ctx.stroke(); }
+      for (let row=0; row<3; row++) for (let k=1;k<6;k++){ const bx = -pw/2 + (k - (row%2?.5:0))*pw/5.5; ctx.beginPath(); ctx.moveTo(bx,row*ph/3); ctx.lineTo(bx,(row+1)*ph/3); ctx.stroke(); }
+      ctx.translate(0,-s*.06); ctx.rotate(.12);
+      drawHeroine(ctx, s, {hair:"#d9d4ca", skin:"#f7f5f1", blouse:"#ffffff", ruffle:"#cfcac0", skirt:"#ece8e1", stripe:"#d3cec5"});
+      ctx.restore();
+    });
+  },
+  lsflags(ctx,c,r,d,z){
+    const STR = ["#003893","#ffc400","#c60a1e"];
+    edgeSpots(r, Math.max(1,Math.round(d)), z).forEach(([x,y])=>{
+      const fw = (115+r()*30)*z, fh = fw*.625; ctx.save(); ctx.translate(x,y); ctx.rotate((r()-.5)*.25);
+      ctx.fillStyle = GOLD; ctx.fillRect(-fw/2-7*z,-fh/2-6*z,6*z,fh*2.1);
+      STR.forEach((col,k)=>{ ctx.fillStyle = col; ctx.fillRect(-fw/2,-fh/2+k*fh/3,fw,fh/3+1); });
       ctx.restore();
     });
   }
