@@ -85,7 +85,7 @@
       <div class="body">
         <textarea id="tm-raw" spellcheck="false" aria-label="Resultados"></textarea>
         <p class="note" id="tm-parseNote"></p>
-        <p class="hint">Formato: nombre de la carrera, fecha, distancia y debajo cada corredor con su tiempo. Una carrera puede tener varias distancias.</p>
+        <p class="hint">Formato: nombre de la carrera, fecha, distancia y debajo cada corredor con su tiempo. Una carrera puede tener varias distancias. Para relevos escribe <b>5K RELEVOS</b> como distancia y debajo el nombre del equipo con su tiempo.</p>
         <pre class="fmt">PANAMA CITY MARATHON
 20/09/2026
 21K
@@ -234,8 +234,13 @@ function normDate(line){
   if (m){ let mon = m[2].toUpperCase(); if (mon==="SETIEMBRE") mon="SEPTIEMBRE"; const mo = MONTHS.indexOf(mon)+1; return {txt:`${+m[1]}/${mon}/${m[3]}`, d:+m[1], mo, y:+m[3]}; }
   return null;
 }
+// Categorías que pueden ir junto a la distancia: "5K RELEVOS", "RELEVOS 5K", "10K RELEVO".
+const reCatAfter = /^(\d+(?:[.,]\d+)?)\s*(?:k|km|kms|k\.)\s+(relevos?)$/i;
+const reCatBefore = /^(relevos?)\s+(\d+(?:[.,]\d+)?)\s*(?:k|km|kms|k\.)$/i;
 function normDist(line){
   const s = line.trim().replace(/\s+/g," ");
+  let c = s.match(reCatAfter); if (c) return c[1].replace(",",".") + "K RELEVOS";
+  c = s.match(reCatBefore); if (c) return c[2].replace(",",".") + "K RELEVOS";
   let m = s.match(reDist); if (m) return m[1].replace(",",".") + "K";
   m = s.match(reMiles); if (m) return m[1].replace(",",".") + " MILLAS";
   if (/^(media\s+marat[oó]n|medio\s+marat[oó]n)$/i.test(s)) return "21K";
