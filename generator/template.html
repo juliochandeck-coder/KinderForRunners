@@ -1383,13 +1383,81 @@ Object.assign(TEMPLATES, {
       const lf = ff("oswald"), ls = fitL(ctx,lf,420,46,.12), ly = 60+off+(l2?ts*1.78:ts*.8)+44, lw = maxLevelW(ctx,lf(ls))+ls*.12*10+60;
       ctx.fillStyle = "#f3a712"; rrect(ctx,62,ly,lw,ls*1.5,ls*.75); ctx.fill();
       txt(ctx,d.level,62+lw/2,ly+ls*1.12,{font:lf(ls),fill:"#3b1f0e",align:"center",spacing:ls*.12,noShadow:1});
-      const top = ly+ls*1.5+50, bottom = up ? 1140 : 990, box = {x:66,y:top,w:790,h:bottom-top};
+      const top = ly+ls*1.5+50, bottom = up ? 1120 : 920, box = {x:66,y:top,w:790,h:bottom-top};
       const L = layout(ctx,d.paras,{font:ff(s.bodyFont),...box,max:80,min:26,lh:1.1,gap:.7,valign:"center",skew:sk(s.bodyFont)});
       drawBlock(ctx,L,s.bodyFont,box,s.align,s.ink);
-      if (up){ txt(ctx,d.date,250,1232,{font:ff("oswald")(30),fill:s.ink,noShadow:1}); txt(ctx,COPY,250,1268,{font:`20px ${SANS}`,fill:s.ink,noShadow:1});
-        return {x:62,y:1170,w:160,align:"left",color:s.ink}; }
-      txt(ctx,d.date,250,1062,{font:ff("oswald")(30),fill:s.ink,noShadow:1}); txt(ctx,COPY,250,1098,{font:`20px ${SANS}`,fill:s.ink,noShadow:1});
-      return {x:62,y:1010,w:160,align:"left",color:s.ink};
+      if (up){ txt(ctx,d.date,212,1230,{font:ff("oswald")(30),fill:s.ink,noShadow:1}); txt(ctx,COPY,212,1264,{font:`20px ${SANS}`,fill:s.ink,noShadow:1});
+        return {x:62,y:1170,w:126,align:"left",color:s.ink}; }
+      txt(ctx,d.date,212,1004,{font:ff("oswald")(30),fill:s.ink,noShadow:1}); txt(ctx,COPY,212,1038,{font:`20px ${SANS}`,fill:s.ink,noShadow:1});
+      return {x:62,y:950,w:126,align:"left",color:s.ink};
+    }},
+
+  retro80:{ name:"Retro 80s", variants:["Atardecer","Solo cuadrícula"],
+    def:{c1:"#12042a",c2:"#5a0f6e",ink:"#ffffff",accent:"#ff3fa4",palette:null,bgType:"linear",angle:180,titleFont:"montBI",bodyFont:"barlowI",align:"center"},
+    draw(ctx,d,s){
+      const hz = 1060, cyan = "#38e8ff", sunOn = V(s)===0, r = rng(80);
+      ctx.save(); ctx.fillStyle = "#ffffff"; for (let i=0;i<70;i++){ ctx.globalAlpha = .25+r()*.6; const z = r()<.15?3:1.6; ctx.fillRect(r()*W, r()*(hz-80), z, z); } ctx.restore();
+      if (sunOn){
+        const R = 240, sy = hz; ctx.save(); ctx.beginPath(); ctx.arc(W/2,sy,R,Math.PI,0); ctx.clip();
+        const g = ctx.createLinearGradient(0,sy-R,0,sy); g.addColorStop(0,"#ffe45c"); g.addColorStop(.55,"#ff8a3d"); g.addColorStop(1,s.accent); ctx.fillStyle = g;
+        let y = sy-R, k = 0; while (y < sy){ const band = 34-k*3.2, gap = 4+k*2.4; ctx.fillRect(W/2-R,y,2*R,Math.max(6,band)); y += Math.max(6,band)+gap; k++; }
+        ctx.restore();
+      }
+      ctx.fillStyle = "#0b0218"; ctx.fillRect(0,hz,W,H-hz);
+      withGlow(ctx,s.accent,14,()=>{ ctx.strokeStyle = s.accent; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(0,hz); ctx.lineTo(W,hz); ctx.stroke();
+        for (let i=1;i<9;i++){ const y = hz + Math.pow(i/8,2.1)*(H-hz); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+        for (let i=-12;i<=12;i++){ ctx.beginPath(); ctx.moveTo(W/2+i*18,hz); ctx.lineTo(W/2+i*150,H+20); ctx.stroke(); } });
+      const tf = ff(s.titleFont), ts = fit(ctx,d.title,tf,940,170), ty = 70+ts*.8;
+      const chrome = ctx.createLinearGradient(0,-ts*.75,0,0);
+      [[0,"#ffffff"],[.45,"#9fdcff"],[.5,"#3a2a7a"],[.56,"#ff9be0"],[1,"#fff3fb"]].forEach(([o,c])=>chrome.addColorStop(o,c));
+      txt(ctx,d.title,W/2+6,ty+8,{font:tf(ts),fill:s.accent,align:"center",skew:sk(s.titleFont),noShadow:1});
+      txt(ctx,d.title,W/2,ty,{font:tf(ts),fill:chrome,stroke:"#2a0a4a",lw:3,align:"center",skew:sk(s.titleFont),noShadow:1});
+      const lf = ff("teko"), ls = fitL(ctx,lf,620,96,.14), ly = ty+40+ls*.8;
+      withGlow(ctx,cyan,22,()=>txt(ctx,d.level,W/2,ly,{font:lf(ls),fill:mix(cyan,"#ffffff",.5),align:"center",spacing:ls*.14,noShadow:1}));
+      const top = ly+60, bottom = sunOn ? 790 : 1000, box = {x:110,y:top,w:860,h:bottom-top};
+      const L = layout(ctx,d.paras,{font:ff(s.bodyFont),...box,max:84,min:26,lh:1.04,gap:.6,valign:"center",skew:sk(s.bodyFont)});
+      withGlow(ctx,s.accent,12,()=>drawBlock(ctx,L,s.bodyFont,box,s.align,s.ink));
+      txt(ctx,d.date,60,1318,{font:ff("teko")(36),fill:"#ffffff",noShadow:1});
+      txt(ctx,COPY,W-60,1318,{font:ff("teko")(30),fill:alpha("#ffffff",.75),align:"right",noShadow:1});
+      return sunOn ? {x:W/2,y:870,w:150,align:"center",color:"#2a0a4a"} : {x:W/2,y:1080,w:140,align:"center",color:"#ffffff"};
+    }},
+
+  retro90:{ name:"Retro 90s", variants:["Memphis","Memphis oscuro"],
+    def:{c1:"#f6f1e7",c2:"#efe6d4",ink:"#111111",accent:"#ff4fa3",palette:null,bgType:"solid",titleFont:"bungee",bodyFont:"montB",align:"left"},
+    draw(ctx,d,s){
+      const dark = V(s)===1, K = dark ? "#ffffff" : "#111111", r = rng(90);
+      const cols = ["#16c2c2",s.accent,"#ffd23f","#7b3fe4"];
+      if (dark){ ctx.fillStyle = "#16112a"; ctx.fillRect(0,0,W,H); }
+      ctx.save(); ctx.fillStyle = alpha(K,.12); for (let y=20;y<H;y+=36) for (let x=20+((y/36)%2)*18;x<W;x+=36){ ctx.beginPath(); ctx.arc(x,y,2.4,0,Math.PI*2); ctx.fill(); } ctx.restore();
+      const shapes = [[60,330],[1010,300],[40,760],[1030,700],[90,1240],[990,1230],[1000,262],[300,1300],[800,1300],[1000,1000],[50,1020]];
+      shapes.forEach(([x,y],i)=>{ const c = cols[i%4], t = i%4; ctx.save(); ctx.translate(x,y); ctx.rotate(r()*Math.PI);
+        if (t===0){ ctx.strokeStyle = c; ctx.lineWidth = 10; ctx.lineCap = "round"; ctx.beginPath(); for (let k=0;k<=40;k++){ const xx = -80+k*4, yy = Math.sin(k/40*Math.PI*3)*18; k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.stroke(); }
+        else if (t===1){ ctx.strokeStyle = K; ctx.lineWidth = 6; ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(0,-48); ctx.lineTo(44,30); ctx.lineTo(-44,30); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+        else if (t===2){ ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0,0,34,0,Math.PI*2); ctx.fill(); ctx.strokeStyle = K; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(8,8,34,0,Math.PI*2); ctx.stroke(); }
+        else { ctx.strokeStyle = c; ctx.lineWidth = 9; ctx.lineJoin = "miter"; ctx.beginPath(); for (let k=0;k<7;k++) ctx.lineTo(-75+k*25, k%2?-16:16); ctx.stroke(); }
+        ctx.restore(); });
+      const was = SHADOW; SHADOW = false;
+      const tf = ff(s.titleFont), ts = fit(ctx,d.title,tf,900,130), ty = 70+ts*.8;
+      txt(ctx,d.title,60+8,ty+8,{font:tf(ts),fill:"#16c2c2",skew:sk(s.titleFont)});
+      txt(ctx,d.title,60,ty,{font:tf(ts),fill:K,skew:sk(s.titleFont)});
+      const lf = ff("rubik"), ls = fitL(ctx,lf,520,44), lw = maxLevelW(ctx,lf(ls))+70, lh = ls*1.9;
+      ctx.save(); ctx.translate(60+lw/2,ty+40+lh/2); ctx.rotate(-.04);
+      ctx.fillStyle = K; ctx.fillRect(-lw/2+8,-lh/2+8,lw,lh); ctx.fillStyle = "#ffd23f"; ctx.fillRect(-lw/2,-lh/2,lw,lh);
+      ctx.strokeStyle = "#111"; ctx.lineWidth = 5; ctx.strokeRect(-lw/2,-lh/2,lw,lh);
+      txt(ctx,d.level,0,ls*.38,{font:lf(ls),fill:"#111",align:"center"}); ctx.restore();
+      const cx = 70, cy = ty+40+lh+40, cw = 940, cb = 1210, ch = cb-cy;
+      ctx.fillStyle = s.accent; ctx.fillRect(cx+18,cy+18,cw,ch); ctx.fillStyle = "#ffffff"; ctx.fillRect(cx,cy,cw,ch);
+      ctx.strokeStyle = "#111"; ctx.lineWidth = 6; ctx.strokeRect(cx,cy,cw,ch);
+      ctx.fillStyle = "#111"; ctx.fillRect(cx,cy,cw,46); [0,1,2].forEach(i=>{ ctx.fillStyle = ["#ff5f57","#ffd23f","#16c2c2"][i]; ctx.beginPath(); ctx.arc(cx+30+i*34,cy+23,10,0,Math.PI*2); ctx.fill(); });
+      txt(ctx,"RUN.EXE",cx+cw-24,cy+32,{font:ff("rubik")(20),fill:"#ffffff",align:"right"});
+      const box = {x:cx+60,y:cy+90,w:cw-120,h:ch-90-150};
+      const L = layout(ctx,d.paras,{font:ff(s.bodyFont),...box,max:62,min:22,lh:1.15,gap:.8,valign:"center",skew:sk(s.bodyFont)});
+      drawBlock(ctx,L,s.bodyFont,box,s.align,"#111");
+      SHADOW = was;
+      txt(ctx,d.date,cx+60,cb-60,{font:ff("rubik")(24),fill:"#111",noShadow:1});
+      txt(ctx,COPY,cx+60,cb-28,{font:`18px ${SANS}`,fill:"#555",noShadow:1});
+      return {x:cx+cw-40,y:cb-24,w:130,align:"right",color:"#111",anchorBottom:true};
     }},
 
   suizo:{ name:"Suizo", variants:["Barra de color","Barra negra"],
