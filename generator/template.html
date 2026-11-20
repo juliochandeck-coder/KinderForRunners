@@ -942,6 +942,40 @@ function rowsFit(ctx, paras, font, maxW, maxS, availH, lh, padEm, gapEm){
   return uniformRows(ctx, paras, font, maxW, maxS*(STYLE.textScale||1), (rows,sz)=>rows.reduce((a,r)=>a+r.length*sz*lh+sz*padEm,0)+sz*gapEm*(rows.length-1)<=availH);
 }
 const LEVEL_NO = d => String(LEVELS.findIndex(l=>l[1]===d.level)+1).padStart(2,"0");
+// escena tropical: cielo de atardecer, sol, mar y palmeras (dibujo propio, plano)
+function palmTree(ctx, bx, by, hgt, lean, sc, col){
+  const tx = bx+lean*hgt, ty = by-hgt, cx = bx+lean*hgt*.2, cy = by-hgt*.55;
+  ctx.save(); ctx.fillStyle = col; ctx.strokeStyle = col; ctx.lineCap = "round";
+  const segs = 24; for (let i=0;i<segs;i++){ const t0 = i/segs, t1 = (i+1)/segs;
+    const P = t => [(1-t)*(1-t)*bx+2*(1-t)*t*cx+t*t*tx, (1-t)*(1-t)*by+2*(1-t)*t*cy+t*t*ty];
+    const [x0,y0] = P(t0), [x1,y1] = P(t1); ctx.lineWidth = (34-22*t0)*sc; ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke(); }
+  const angs = [-2.9,-2.45,-2.0,-1.45,-1.0,-.55,-.15];
+  angs.forEach((a,i)=>{ const len = (230+((i*37)%60))*sc, droop = .55+(i%3)*.12;
+    const ex = tx+Math.cos(a)*len, ey = ty+Math.sin(a)*len*.55+len*droop*.55;
+    const mx = tx+Math.cos(a)*len*.55, my = ty+Math.sin(a)*len*.55-len*.08, wdt = 26*sc;
+    ctx.beginPath(); ctx.moveTo(tx,ty);
+    ctx.quadraticCurveTo(mx, my-wdt, ex, ey); ctx.quadraticCurveTo(mx, my+wdt*1.4, tx, ty+6*sc); ctx.fill();
+    for (let k=1;k<6;k++){ const t = k/6, px = (1-t)*(1-t)*tx+2*(1-t)*t*mx+t*t*ex, py = (1-t)*(1-t)*ty+2*(1-t)*t*my+t*t*ey;
+      ctx.lineWidth = 7*sc; ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+Math.cos(a+1.9)*28*sc*(1-t*.5), py+Math.sin(a+1.9)*28*sc*(1-t*.5)+18*sc); ctx.stroke(); } });
+  ctx.beginPath(); ctx.arc(tx-8*sc,ty+14*sc,11*sc,0,Math.PI*2); ctx.arc(tx+10*sc,ty+16*sc,11*sc,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+function viceScene(ctx, x, y, w, h, s, o){
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  const hz = o.hz, sky = ctx.createLinearGradient(0,Math.min(y,hz-900),0,hz);
+  sky.addColorStop(0,s.c1); sky.addColorStop(.45,mix(s.c1,s.c2,.6)); sky.addColorStop(.78,s.c2); sky.addColorStop(1,s.accent);
+  ctx.fillStyle = sky; ctx.fillRect(x,y,w,hz-y);
+  if (o.sunR > 20){ const sg = ctx.createRadialGradient(o.sunX,hz,o.sunR*.6,o.sunX,hz,o.sunR*2.4); sg.addColorStop(0,alpha("#ffe9a0",.55)); sg.addColorStop(1,alpha("#ffe9a0",0));
+    ctx.fillStyle = sg; ctx.fillRect(x,y,w,hz-y);
+    const sun = ctx.createLinearGradient(0,hz-o.sunR,0,hz); sun.addColorStop(0,"#fff3b0"); sun.addColorStop(1,mix(s.accent,"#ffe066",.4));
+    ctx.fillStyle = sun; ctx.beginPath(); ctx.arc(o.sunX,hz,o.sunR,Math.PI,0); ctx.fill(); }
+  const sea = ctx.createLinearGradient(0,hz,0,y+h); sea.addColorStop(0,"#1fb5b8"); sea.addColorStop(1,"#0b3c5a");
+  ctx.fillStyle = sea; ctx.fillRect(x,hz,w,y+h-hz);
+  ctx.fillStyle = alpha("#fff3b0",.55); for (let i=0;i<14;i++){ const yy = hz+8+i*i*2.2, ww = (o.sunR*1.4)*(1-i/16); if (o.sunR>20) ctx.fillRect(o.sunX-ww/2+(i%2?14:-14),yy,ww,3+i*.3); }
+  ctx.fillStyle = alpha("#ffffff",.18); for (let i=0;i<6;i++){ const yy = hz+30+i*i*9; ctx.fillRect(x,yy,w,2); }
+  (o.palms||[]).forEach(([bx,by,hh,ln,sc])=>palmTree(ctx,bx,by,hh,ln,sc,"#170a24"));
+  ctx.restore();
+}
 const MESES = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
 
 Object.assign(TEMPLATES, {
@@ -1458,6 +1492,58 @@ Object.assign(TEMPLATES, {
       txt(ctx,d.date,cx+60,cb-60,{font:ff("rubik")(24),fill:"#111",noShadow:1});
       txt(ctx,COPY,cx+60,cb-28,{font:`18px ${SANS}`,fill:"#555",noShadow:1});
       return {x:cx+cw-40,y:cb-24,w:130,align:"right",color:"#111",anchorBottom:true};
+    }},
+
+  tropical:{ name:"Tropical Neón", variants:["Atardecer","Paneles"],
+    def:{c1:"#2a0d4e",c2:"#ff4f8b",ink:"#ffffff",accent:"#ffb347",palette:null,bgType:"solid",titleFont:"montBI",bodyFont:"barlowI",align:"center"},
+    draw(ctx,d,s){
+      const DARK = "#160822", tf = ff(s.titleFont), was = SHADOW;
+      const titleArt = (t,x,y,size,maxW,al="center") => {
+        const z = Math.min(size, fit(ctx,t,tf,maxW,size)); ctx.font = tf(z);
+        const g = ctx.createLinearGradient(0,-z*.75,0,z*.05);
+        g.addColorStop(0,"#ffe066"); g.addColorStop(.45,s.accent); g.addColorStop(.75,s.c2); g.addColorStop(1,mix(s.c2,s.c1,.4));
+        txt(ctx,t,x+z*.05,y+z*.06,{font:tf(z),fill:DARK,stroke:DARK,lw:z*.16,align:al,skew:sk(s.titleFont)||.12,noShadow:1});
+        txt(ctx,t,x,y,{font:tf(z),fill:g,stroke:DARK,lw:z*.09,align:al,skew:sk(s.titleFont)||.12,noShadow:1});
+        return z;
+      };
+      const tag = (t,x,y,size,al="center") => { const f = ff("teko"), w = textW(ctx,t,f(size),size*.1)+size*1.1, h = size*1.05, x0 = al==="center"?x-w/2:x;
+        ctx.fillStyle = DARK; ctx.beginPath(); ctx.moveTo(x0+h*.3,y); ctx.lineTo(x0+w+h*.3,y); ctx.lineTo(x0+w-h*.3,y+h); ctx.lineTo(x0-h*.3,y+h); ctx.closePath(); ctx.fill();
+        txt(ctx,t,x0+w/2,y+h*.84,{font:f(size),fill:"#ffffff",align:"center",spacing:size*.1,noShadow:1}); };
+      SHADOW = false;
+      if (V(s)===0){
+        viceScene(ctx,0,0,W,H,s,{hz:1010,sunX:W/2,sunR:250,palms:[[-40,1060,700,.32,1],[120,1120,520,.12,.8],[W+30,1080,650,-.3,1],[W-110,1150,470,-.1,.75]]});
+        const ts = titleArt(d.title,W/2,70+150*.8,150,960);
+        tag(d.level,W/2,70+ts*.8+40,64);
+        const top = 70+ts*.8+40+64*1.05+40, bottom = 900, box = {x:150,y:top,w:780,h:bottom-top};
+        ctx.save(); ctx.fillStyle = alpha(DARK,.58); rrect(ctx,110,top-10,860,bottom-top+20,26); ctx.fill(); ctx.restore();
+        const L = layout(ctx,d.paras,{font:ff(s.bodyFont),...box,max:78,min:24,lh:1.06,gap:.6,valign:"center",skew:sk(s.bodyFont)});
+        drawBlock(ctx,L,s.bodyFont,box,s.align,s.ink);
+        txt(ctx,d.date,40,1318,{font:ff("teko")(36),fill:"#ffffff",noShadow:1});
+        txt(ctx,COPY,W-40,1318,{font:ff("teko")(30),fill:alpha("#ffffff",.85),align:"right",noShadow:1});
+        SHADOW = was;
+        return {x:W/2,y:1110,w:150,align:"center",color:"#ffffff"};
+      }
+      // Paneles: collage de cuadros con borde negro
+      const gp = 16; ctx.fillStyle = DARK; ctx.fillRect(0,0,W,H);
+      const A = [gp,gp,W-2*gp,330], B = [gp,330+2*gp,300,690], C = [300+2*gp,330+2*gp,W-300-3*gp,690], D = [gp,1020+3*gp,W-2*gp,H-1020-4*gp];
+      viceScene(ctx,...A,s,{hz:A[1]+250,sunX:W*.72,sunR:150,palms:[[W-40,A[1]+330,300,-.25,.55]]});
+      viceScene(ctx,...B,s,{hz:B[1]+560,sunX:B[0]+80,sunR:90,palms:[[B[0]+40,B[1]+720,600,.18,.95],[B[0]+250,B[1]+720,420,-.15,.7]]});
+      ctx.save(); ctx.beginPath(); ctx.rect(...C); ctx.clip();
+      ctx.fillStyle = linGrad(ctx,150,[s.c2,s.accent]); ctx.fillRect(...C);
+      ctx.strokeStyle = alpha("#ffffff",.12); ctx.lineWidth = 3; for (let i=-20;i<40;i++){ ctx.beginPath(); ctx.moveTo(C[0]+i*40,C[1]); ctx.lineTo(C[0]+i*40+C[3]*.6,C[1]+C[3]); ctx.stroke(); }
+      ctx.restore();
+      viceScene(ctx,...D,s,{hz:D[1]+40,sunX:-400,sunR:10,palms:[]});
+      const ts = titleArt(d.title,W/2,A[1]+40+130*.8,130,W-120);
+      tag(d.level,W/2,A[1]+40+ts*.8+30,56);
+      const box = {x:C[0]+50,y:C[1]+50,w:C[2]-100,h:C[3]-100};
+      const L = layout(ctx,d.paras,{font:ff(s.bodyFont),...box,max:74,min:22,lh:1.06,gap:.6,valign:"center",skew:sk(s.bodyFont)});
+      L.lines.forEach(l=>{ const x = s.align==="left"?box.x:s.align==="right"?box.x+box.w:box.x+box.w/2;
+        txt(ctx,l.t,x+4,l.y+5,{font:ff(s.bodyFont)(L.size),fill:alpha(DARK,.55),align:s.align,skew:sk(s.bodyFont),noShadow:1}); });
+      drawBlock(ctx,L,s.bodyFont,box,s.align,"#ffffff");
+      txt(ctx,d.date,D[0]+30,D[1]+D[3]/2+4,{font:ff("teko")(40),fill:"#ffffff",noShadow:1});
+      txt(ctx,COPY,D[0]+30,D[1]+D[3]/2+40,{font:ff("teko")(28),fill:alpha("#ffffff",.85),noShadow:1});
+      SHADOW = was;
+      return {x:W-gp-40,y:D[1]+30,w:150,align:"right",color:"#ffffff"};
     }},
 
   suizo:{ name:"Suizo", variants:["Barra de color","Barra negra"],
